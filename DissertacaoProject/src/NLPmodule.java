@@ -4,12 +4,14 @@ import edu.upc.freeling.DepTxala;
 import edu.upc.freeling.HmmTagger;
 import edu.upc.freeling.LangIdent;
 import edu.upc.freeling.ListSentence;
+import edu.upc.freeling.ListSentenceIterator;
 import edu.upc.freeling.ListWord;
 import edu.upc.freeling.Maco;
 import edu.upc.freeling.MacoOptions;
 import edu.upc.freeling.Nec;
 import edu.upc.freeling.SWIGTYPE_p_splitter_status;
 import edu.upc.freeling.Senses;
+import edu.upc.freeling.Sentence;
 import edu.upc.freeling.Splitter;
 import edu.upc.freeling.Tokenizer;
 import edu.upc.freeling.Ukb;
@@ -87,7 +89,7 @@ public class NLPmodule {
 
     }
     
-    public void userQueryAnalysis(String userQuery){
+    private ListSentence userQueryAnalysis(String userQuery){
         // Extract the tokens from the line of text.
         ListWord l = tk.tokenize(userQuery);
 
@@ -110,5 +112,17 @@ public class NLPmodule {
         parser.analyze(ls);
         // Dependency parser
         dep.analyze(ls);
+        
+        return ls;
+    }
+    
+    public void printAnalysis(String userQuery){
+        ListSentence ls = this.userQueryAnalysis(userQuery);
+        ListSentenceIterator sIt = new ListSentenceIterator(ls);
+        
+        while (sIt.hasNext()) {
+                Sentence s = sIt.next();
+                System.out.println(s);
+            }
     }
 }

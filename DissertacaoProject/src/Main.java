@@ -16,10 +16,12 @@ public class Main {
     public static void main(String[] args) {
         UserInput userInput = new UserInput();
         NLPmodule nlpm = new NLPmodule();
-        
+                
         userInput.requestUserInput();
-        System.out.println(userInput.getUserQuery());
         
+        String userQuery = userInput.getUserQuery();
+        
+        //nlpm.printAnalysis(userQuery);
         
     }
     
