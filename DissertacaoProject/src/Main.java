@@ -14,7 +14,9 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+        UserInput userInput = new UserInput();
+        userInput.requestUserInput();
+        System.out.println(userInput.getUserQuery());
     }
     
 }
