@@ -3,6 +3,8 @@ import edu.upc.freeling.ChartParser;
 import edu.upc.freeling.DepTxala;
 import edu.upc.freeling.HmmTagger;
 import edu.upc.freeling.LangIdent;
+import edu.upc.freeling.ListSentence;
+import edu.upc.freeling.ListWord;
 import edu.upc.freeling.Maco;
 import edu.upc.freeling.MacoOptions;
 import edu.upc.freeling.Nec;
@@ -83,5 +85,30 @@ public class NLPmodule {
                 true, true, false, true, // submodules are to be used. 
                 true, true, true, true);  // default: all created submodules
 
+    }
+    
+    public void userQueryAnalysis(String userQuery){
+        // Extract the tokens from the line of text.
+        ListWord l = tk.tokenize(userQuery);
+
+        // Split the tokens into distinct sentences.
+        ListSentence ls = sp.split(sid, l, false);
+
+        // Perform morphological analysis
+        mf.analyze(ls);
+
+        // Perform part-of-speech tagging.
+        tg.analyze(ls);
+
+        // Perform named entity (NE) classificiation.
+        neclass.analyze(ls);
+
+        sen.analyze(ls);
+        dis.analyze(ls);
+        // Chunk parser
+
+        parser.analyze(ls);
+        // Dependency parser
+        dep.analyze(ls);
     }
 }
