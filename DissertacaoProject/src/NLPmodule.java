@@ -23,6 +23,7 @@ import edu.upc.freeling.Ukb;
 import edu.upc.freeling.Util;
 import edu.upc.freeling.VectorWord;
 import edu.upc.freeling.Word;
+import it.uniroma1.lcl.babelnet.data.BabelPOS;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,7 +134,9 @@ public class NLPmodule {
             ListWordIterator wIt = new ListWordIterator(s);
             while (wIt.hasNext()) {
                 Word w = wIt.next();
-                processedWords.add(new ProcessedWord(w.getLemma(), this.posIdentifier(w.getTag())));
+                if(w.getLemma().length() > 2){ 
+                    processedWords.add(new ProcessedWord(w.getLemma(), this.posIdentifier(w.getTag())));
+                }
             }
         }
         
@@ -152,43 +155,43 @@ public class NLPmodule {
         }
     }
 
-    private String posIdentifier(String tag) {
-        String resTag = "";
+    private BabelPOS posIdentifier(String tag) {
+        BabelPOS resTag =null;
         char tagFirstChar = tag.charAt(0);
         
         switch (tagFirstChar) {
             case 'A':
-                resTag = "adjective";
+                resTag = BabelPOS.ADJECTIVE;
                 break;
             case 'C':
-                resTag = "conjunction";
+                resTag = BabelPOS.CONJUNCTION;
                 break;
             case 'D':
-                resTag = "determiner";
+                resTag = BabelPOS.DETERMINER;
                 break;
             case 'I':
-                resTag = "interjection";
+                resTag = BabelPOS.INTERJECTION;
                 break;
             case 'N':
-                resTag = "noun";
+                resTag = BabelPOS.NOUN;
                 break;
             case 'P':
-                resTag = "pronoun";
+                resTag = BabelPOS.PRONOUN;
                 break;
             case 'R':
-                resTag = "adverb";
+                resTag = BabelPOS.ADVERB;
                 break;
             case 'S':
-                resTag = "adposition";
+                //resTag = "adposition";
                 break;
             case 'V':
-                resTag = "verb";
+                resTag = BabelPOS.VERB;
                 break;
             case 'Z':
-                resTag = "number";
+                //resTag = "number";
                 break;
             case 'W':
-                resTag = "date";
+                //resTag = "date";
                 break;
         }
         return resTag;
@@ -338,7 +341,7 @@ public class NLPmodule {
         //System.out.println("Probability: " + anl.getProb());
         //System.out.println("Senses string: " + anl.getSensesString());
         //anl.setLemma(this.posIdentifier(anl.getLemma()));
-        anl.setLemma(posIdentifier(w.getTag()));
+        //anl.setLemma(posIdentifier(w.getTag()));
     }
     
     public void wordIterator(Sentence s) {

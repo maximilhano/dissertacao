@@ -17,15 +17,20 @@ public class Main {
     public static void main(String[] args) {
         UserInput userInput = new UserInput();
         NLPmodule nlpm = new NLPmodule();
+        BabelnetModule bnm = new BabelnetModule();
 
         //userInput.requestUserInput();
         String userQuery = "Quando nasceu o Albert Einstein?";//userInput.getUserQuery();
 
         List<ProcessedWord> lpw = nlpm.analyzeUserQuery(userQuery);
         
+        System.out.println("\n\tPROCESSED WORDS\n");
         for(ProcessedWord pw : lpw){
             pw.printInfo();
+            bnm.printSenses(lpw);
         }
+        
+        
         
     }
 }
