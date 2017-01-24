@@ -27,11 +27,17 @@ public class BabelnetModule {
             System.out.println(getSenses(pw));
         }
     }
+    
+    public void printSynsets(List<ProcessedWord> lpw){
+        for(ProcessedWord pw : lpw){
+           
+        }
+    }
 
     private List<BabelSense> getSenses (ProcessedWord pw){
         List<BabelSense> result = null;
         try {
-            result = this.bn.getSenses(pw.getLemma(), lang, pw.getposTag());
+            result = bn.getSenses(pw.getLemma(), lang, pw.getposTag());
         } catch (IOException ex) {
             Logger.getLogger(BabelnetModule.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -25,8 +25,9 @@ public class Main {
         System.out.println("\n\tPROCESSED WORDS\n");
         for(ProcessedWord pw : lpw){
             pw.printInfo();
-            bnm.printSenses(lpw);
         }
+        
+        bnm.printSenses(lpw);
         
         
         
