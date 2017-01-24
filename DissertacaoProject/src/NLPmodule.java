@@ -21,7 +21,6 @@ import edu.upc.freeling.Splitter;
 import edu.upc.freeling.Tokenizer;
 import edu.upc.freeling.Ukb;
 import edu.upc.freeling.Util;
-import edu.upc.freeling.VectorWord;
 import edu.upc.freeling.Word;
 import it.uniroma1.lcl.babelnet.data.BabelPOS;
 import java.util.ArrayList;

@@ -1,6 +1,4 @@
 
-import edu.upc.freeling.*;
-import java.io.IOException;
 import java.util.List;
 
 /*

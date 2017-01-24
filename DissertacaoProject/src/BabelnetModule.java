@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class BabelnetModule {
 
-    private final BabelNet bn = BabelNet.getInstance();;
+    private final BabelNet bn = BabelNet.getInstance();
     private final Language lang = Language.PT;
     
     public void printSenses(List<ProcessedWord> lpw){
