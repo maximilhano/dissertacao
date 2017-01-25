@@ -1,5 +1,9 @@
 
+import it.uniroma1.lcl.babelnet.BabelSynset;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -22,14 +26,14 @@ public class Main {
 
         List<ProcessedWord> lpw = nlpm.analyzeUserQuery(userQuery);
         
-        System.out.println("\n\tPROCESSED WORDS\n");
+        //System.out.println("\n\tPROCESSED WORDS\n");
         for(ProcessedWord pw : lpw){
             pw.printInfo();
+            //bnm.printEdges(bnm.getSynsets(pw));
         }
         
-        bnm.printSenses(lpw);
-        
-        
+        //bnm.printSenses(lpw);
+        //bnm.printSynsets(lpw);
         
     }
 }
