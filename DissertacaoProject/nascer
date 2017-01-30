@@ -1,0 +1,11 @@
+bn:00083199v,be_born,hyponym,bn:00092709v,transmigrate
+bn:00083199v,be_born,derivationally_related_form,bn:00010663n,birth
+bn:00083199v,be_born,hypernym,bn:00084787v,turn
+bn:00083199v,be_born,hyponym,bn:00085369v,come_into_being
+bn:00083199v,be_born,antonym,bn:00084343v,perish
+bn:00083199v,be_born,gloss_related_form_(disambiguated),bn:00009676n,existence
+bn:00083199v,be_born,hyponym,bn:00087998v,fall
+bn:00083199v,be_born,derivationally_related_form,bn:00010664n,nativity
+bn:00083199v,be_born,derivationally_related_form,bn:00010665n,birth
+bn:00083199v,be_born,hyponym,bn:00089235v,hatch
+bn:00083199v,be_born,gloss_related_form_(disambiguated),bn:00010664n,nativity

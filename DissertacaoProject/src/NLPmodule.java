@@ -133,7 +133,7 @@ public class NLPmodule {
             ListWordIterator wIt = new ListWordIterator(s);
             while (wIt.hasNext()) {
                 Word w = wIt.next();
-                if(w.getLemma().length() > 2){ 
+                if(w.getLemma().length() > 2){ //to do use stopwords
                     processedWords.add(new ProcessedWord(w.getLemma(), this.posIdentifier(w.getTag())));
                 }
             }

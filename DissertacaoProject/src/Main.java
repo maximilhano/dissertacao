@@ -1,9 +1,5 @@
 
-import it.uniroma1.lcl.babelnet.BabelSynset;
-import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -22,15 +18,17 @@ public class Main {
         BabelnetModule bnm = new BabelnetModule();
 
         //userInput.requestUserInput();
-        String userQuery = "Quando nasceu o Albert Einstein?";//userInput.getUserQuery();
+        String userQuery = "Quando nasceu o Albert Einstein??" ;//userInput.getUserQuery();  
 
         List<ProcessedWord> lpw = nlpm.analyzeUserQuery(userQuery);
+        bnm.doRequest(lpw);
+        //bnm.printExpandedSynsets();
         
         //System.out.println("\n\tPROCESSED WORDS\n");
-        for(ProcessedWord pw : lpw){
+        /*for(ProcessedWord pw : lpw){
             pw.printInfo();
             //bnm.printEdges(bnm.getSynsets(pw));
-        }
+        }*/
         
         //bnm.printSenses(lpw);
         //bnm.printSynsets(lpw);

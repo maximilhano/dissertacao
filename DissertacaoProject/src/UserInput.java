@@ -27,8 +27,8 @@ public class UserInput {
     public void requestUserInput(){
         try {
             System.out.println("Waiting for user input: ");
-            this.input = new BufferedReader(new InputStreamReader(System.in, "utf-8"));
-            this.userQuery = this.input.readLine();
+            input = new BufferedReader(new InputStreamReader(System.in, "utf-8"));
+            userQuery = this.input.readLine();
         } catch (IOException ex) {
             Logger.getLogger(UserInput.class.getName()).log(Level.SEVERE, null, ex);
         }
