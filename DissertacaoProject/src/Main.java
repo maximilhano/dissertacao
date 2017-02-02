@@ -1,4 +1,7 @@
 
+import NLP.ProcessedWord;
+import NLP.NLPmodule;
+import BabelNet.BabelnetModule;
 import java.util.List;
 
 /*
@@ -18,7 +21,7 @@ public class Main {
         BabelnetModule bnm = new BabelnetModule();
 
         //userInput.requestUserInput();
-        String userQuery = "Quando nasceu o Albert Einstein??" ;//userInput.getUserQuery();  
+        String userQuery = "Quando nasceu o Albert Einstein?" ;//userInput.getUserQuery();   
 
         List<ProcessedWord> lpw = nlpm.analyzeUserQuery(userQuery);
         bnm.doRequest(lpw);

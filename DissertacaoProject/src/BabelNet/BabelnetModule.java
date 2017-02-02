@@ -1,15 +1,15 @@
+package BabelNet;
 
+import File.FileLogger;
+import NLP.ProcessedWord;
 import it.uniroma1.lcl.babelnet.BabelNet;
 import it.uniroma1.lcl.babelnet.BabelSense;
 import it.uniroma1.lcl.babelnet.BabelSynset;
-import it.uniroma1.lcl.babelnet.BabelSynsetID;
 import it.uniroma1.lcl.babelnet.BabelSynsetIDRelation;
 import it.uniroma1.lcl.babelnet.data.BabelPointer;
 import it.uniroma1.lcl.jlt.util.Language;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,54 +26,60 @@ import java.util.logging.Logger;
 public class BabelnetModule {
 
     private final BabelNet bn = BabelNet.getInstance();
-    ;
+
     private final Language lang = Language.PT;
     private HashSet<BabelPointer> pointers = new HashSet<>();
 
-    private HashSet<BabelSynset> synstetEdges = new HashSet<>();
-    private List<HashSet<BabelSynset>> expandedSynsets = new ArrayList<>();
+    private HashSet<HashSet<Synset>> sessionSynsets = new HashSet<>();
 
     FileLogger fl = new FileLogger();
-    HashSet<String> toFileHash;
 
     public BabelnetModule() {
         setPointers();
     }
 
-    private void clearSynsetEdges(HashSet<BabelSynset> synsetEdges) {
-        expandedSynsets.add(synsetEdges);
-        synstetEdges = new HashSet<>();
-    }
-
     /**
-     * Paraca cada token da query do utilizador, é efetuada a expansão com
+     * Para cada token da query do utilizador, é efetuada a expansão com
      * objetivo de econtrar relações
      *
-     * @param lpw
+     * @param lpw public Synset(String lemma, String id, ) { this.lemma = lemma;
+     * this.id = id; }
+     *
      */
     public void doRequest(List<ProcessedWord> lpw) {
         for (ProcessedWord pw : lpw) {
-            fl.newFile(pw.getLemma());
-            List<BabelSynset> synsets = getSynsets(pw);
-            expand(1, synsets);
+            HashSet<Synset> expandedSynsets = new HashSet<Synset>();
+            // verificar se lemma já existe na pasta
+//            if(fl.fileExists(pw.getLemma())){
+//                // se o ficheiro existe, carrega-se o conteudo do mesmo
+//                expandedSynsets = fl.getExpandedSynsets(pw.getLemma()); // obter expandedSynsets do ficheiro
+//            }else{
+            // se o ficheiro não existe, são feitos os pedidos a babelnet, e depois guardam se o dados no ficheiro
+            fl.newFile(pw.getLemma()); // Criar o novo ficheiro "nome do processes word"
+            List<BabelSynset> synsets = getSynsets(pw); // lista de synsets de palavra corrente
+            expandedSynsets = getExpandedSynsets(0, synsets);
+            fl.writeHashToFile(expandedSynsets); // guardar no ficheiro os expanded Synsets
+            //}
+            sessionSynsets.add(expandedSynsets);
+            //levenhsteinAnalyze(sessionSynsets);
         }
     }
 
-    public void printExpandedSynsets() {
-        for (HashSet<BabelSynset> hash : expandedSynsets) {
-            Iterator iterator = hash.iterator();
-            while (iterator.hasNext()) {
-                BabelSynset synset = (BabelSynset) iterator.next();
-
-                /*System.out.println(
-                        "Synset ID: " + synset.getId() + "\t" 
-                      // "Synset toString PT: " + synset.toString(lang) + "\t" 
-                      //+ "Synset toString EN: " + synset.toString(Language.EN) + "\t" 
-                      + "Synset main sense PT: " + synset.getMainSense(lang).getLemma() + "\t"
-                      + "Synset main sense EN: " + synset.getMainSense(Language.EN).getLemma()
-                /* +synset.getGlosses(lang));*/
-            }
+    /**
+     * Função devolve todos as palavras que partilham o mesmo significado
+     * (sinonimos) de uma dada palavra
+     *
+     * @param pw
+     * @return
+     */
+    public List<BabelSynset> getSynsets(ProcessedWord pw) {
+        List<BabelSynset> result = null;
+        try {
+            result = bn.getSynsets(pw.getLemma(), lang, pw.getPosTag());
+        } catch (IOException ex) {
+            Logger.getLogger(BabelnetModule.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return result;
     }
 
     /**
@@ -81,33 +87,48 @@ public class BabelnetModule {
      * @param level indica o numero de vezes que repetira a tarefa de expanção
      * @param synsets synsets de cada um dos tokens da query do utilizador
      */
-    private void expand(int level, List<BabelSynset> synsets) {
-
-        HashSet<BabelSynset> synsetEdges = new HashSet<>(); // aqui serão guardados os edges (synsets) resultantes da expansão de um conjunto de synsets
-        toFileHash = new HashSet<>();
-
-        for (int i = 0; i < level; i++) {
-            if (synsetEdges.isEmpty()) {
-                synsetEdges = expandSynsets(synsets);
-            } else {
-                synsetEdges = expandSynsets(new ArrayList<>(synsetEdges));
-            }
-        }
-        fl.writeHashToFile(toFileHash);
-        clearSynsetEdges(synsetEdges);
-    }
-
     /**
      *
      * @param synsets
      * @return retorna o hashset com todos os edges de todos os synsets
      */
-    private HashSet<BabelSynset> expandSynsets(List<BabelSynset> synsets) {
-        HashSet<BabelSynset> localSynstetEdges = new HashSet<>();
+    private HashSet<Synset> getExpandedSynsets(int level, List<BabelSynset> synsets) {
+        HashSet<Synset> output = new HashSet<>(); // lista de todos os synsets com os edges
+
         for (BabelSynset synset : synsets) {
-            getEdges(synset, localSynstetEdges);
+            Synset s = new Synset(synset.getMainSense(Language.EN).getLemma(), synset.getId().toString());
+            s.setEdges(getEdges(level, synset));
+            output.add(s);
         } // depois de obter edges, que foram guardados para variavel global synsetEdges, esta variavel duplica-se para guardar edges do proximo synset.
-        return localSynstetEdges;
+
+        return output;
+    }
+
+    private HashSet<Edge> getEdges(int level, BabelSynset synset) {
+        HashSet<Edge> edges = new HashSet<>();
+        HashSet<String> ids = new HashSet<>(); // armazena os id's de synsets, e serve para controlar o id's repetidos
+
+        for (BabelSynsetIDRelation edge : synset.getEdges()) {
+            String edgeSynsetId = edge.getBabelSynsetIDTarget().toString();
+            
+            if (isRightPointer(edge.getPointer()) && !ids.contains(edgeSynsetId)) {
+                try {
+                    String pointer = edge.getPointer().getName(); // identifica a relação existente entre o synset e edges
+                    String edgeSynsetLemma = edge.getBabelSynsetIDTarget().toBabelSynset().getMainSense(Language.EN).getLemma();
+                    Edge edgeSynset = new Edge(edgeSynsetId, edgeSynsetLemma, pointer);
+
+                    for (int i = 0; i < level; i++) { // consoante o nivel de expanção, adiciona edges do edge
+                        edgeSynset.setEdges(getEdges(0, edge.getBabelSynsetIDTarget().toBabelSynset()));
+                    }
+                    System.out.println("Pointer: " + pointer + " | edgeSynsetID: " + edgeSynsetId + " | edgeLemma: " + edgeSynsetLemma);
+                    ids.add(edgeSynsetId);
+                    edges.add(edgeSynset);
+                } catch (IOException ex) {
+                    Logger.getLogger(BabelnetModule.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return edges;
     }
 
     public void printSenses(List<ProcessedWord> lpw) {
@@ -201,66 +222,21 @@ public class BabelnetModule {
         }
     }
 
-    /**
-     * Função devolve todos as palavras que partilham o mesmo significado
-     * (sinonimos) de uma dada palavra
-     *
-     * @param pw
-     * @return
-     */
-    public List<BabelSynset> getSynsets(ProcessedWord pw) {
-        List<BabelSynset> result = null;
-        try {
-            result = bn.getSynsets(pw.getLemma(), lang, pw.getposTag());
-        } catch (IOException ex) {
-            Logger.getLogger(BabelnetModule.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return result;
-    }
-
     private List<BabelSense> getSenses(ProcessedWord pw) {
         List<BabelSense> result = null;
         try {
-            result = bn.getSenses(pw.getLemma(), lang, pw.getposTag());
+            result = bn.getSenses(pw.getLemma(), lang, pw.getPosTag());
         } catch (IOException ex) {
             Logger.getLogger(BabelnetModule.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
-    }
-
-    private HashSet<BabelSynset> getEdges(BabelSynset synset, HashSet<BabelSynset> synsetEdges) {
-        for (BabelSynsetIDRelation edge : synset.getEdges()) {
-            if (isRightPointer(edge.getPointer())) {
-
-                try {
-                    BabelSynsetID synsetId = synset.getId();
-                    String synsetLemma = synset.getMainSense(Language.EN).getLemma();
-                    BabelPointer pointer = edge.getPointer(); // identifica a relação existente entre o synset e edges
-                    BabelSynsetID edgeSynsetId = edge.getBabelSynsetIDTarget();
-                    String edgeSynsetLemma = edgeSynsetId.toBabelSynset().getMainSense(Language.EN).getLemma();
-                    String finalResult = synsetId + "," + synsetLemma + "," + pointer + "," + edgeSynsetId + "," + edgeSynsetLemma;
-                    toFileHash.add(finalResult);
-                    System.out.println(finalResult);
-                } catch (IOException ex) {
-                    Logger.getLogger(BabelnetModule.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                try {
-                    synsetEdges.add(edge.getBabelSynsetIDTarget().toBabelSynset());
-                } catch (IOException ex) {
-                    Logger.getLogger(BabelnetModule.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        return synsetEdges;
     }
 
     private boolean isRightPointer(BabelPointer pointer) {
         return !pointer.getSymbol().equals("r");
     }
-    
-    public void defineSynsetCompareHash(HashSet<String> input){
-        
-    }
 
+    public void defineSynsetCompareHash(HashSet<String> input) {
+
+    }
 }
