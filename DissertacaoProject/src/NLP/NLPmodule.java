@@ -26,6 +26,7 @@ import edu.upc.freeling.Util;
 import edu.upc.freeling.Word;
 import it.uniroma1.lcl.babelnet.data.BabelPOS;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /*
@@ -99,7 +100,7 @@ public class NLPmodule {
                 true, true, true, true);  // default: all created submodules
     }
 
-    public List<ProcessedWord> analyzeUserQuery(String userQuery) {
+    public HashSet<ProcessedWord> analyzeUserQuery(String userQuery) {
         // Extract the tokens from the line of text.
         ListWord l = tk.tokenize(userQuery);
 
@@ -126,8 +127,8 @@ public class NLPmodule {
         return getProcessedWords(ls);
     }
 
-    private List<ProcessedWord> getProcessedWords(ListSentence ls) {
-        List<ProcessedWord> processedWords = new ArrayList<>();
+    private HashSet<ProcessedWord> getProcessedWords(ListSentence ls) {
+        HashSet<ProcessedWord> processedWords = new HashSet<>();
         ListSentenceIterator sIt = new ListSentenceIterator(ls);
         
         while (sIt.hasNext()) {
@@ -135,7 +136,7 @@ public class NLPmodule {
             ListWordIterator wIt = new ListWordIterator(s);
             while (wIt.hasNext()) {
                 Word w = wIt.next();
-                if(w.getLemma().length() > 2){ //to do use stopwords
+                if(w.getLemma().length() > 2){ //to do use stopwords https://gist.github.com/alopes/5358189
                     processedWords.add(new ProcessedWord(w.getLemma(), this.posIdentifier(w.getTag())));
                 }
             }

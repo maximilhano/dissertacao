@@ -14,8 +14,8 @@ import java.util.Iterator;
  * @author maksym
  */
 public abstract class AbstractSynset extends Word{
-    private String id;
-    private HashSet<Edge> edges;
+    protected String id;
+    protected HashSet<Edge> edges;
 
     public AbstractSynset(String id, String lemma) {
         super(lemma);
@@ -26,8 +26,24 @@ public abstract class AbstractSynset extends Word{
         return id;
     }
 
-    protected HashSet<Edge> getEdges() {
+    public HashSet<Edge> getEdges() {
         return edges;
+    }
+    
+    public HashSet<String> getEdgesLemma(){
+        HashSet<String> output = new HashSet<>();
+        for(Edge edge : edges){
+            output.add(edge.getLemma());
+        }
+        return output;
+    }
+    
+    public HashSet<String> getEdgesPointer(){
+        HashSet<String> output = new HashSet<>();
+        for(Edge edge : edges){
+            output.add(edge.getPointer());
+        }
+        return output;
     }
     
     protected void addEdge(Edge edge){

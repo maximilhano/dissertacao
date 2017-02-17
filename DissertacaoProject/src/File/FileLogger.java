@@ -3,6 +3,7 @@ package File;
 
 import BabelNet.Edge;
 import BabelNet.Synset;
+import NLP.ProcessedWord;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,18 +20,13 @@ public class FileLogger {
     private File currentFile;
     private final String directory = "lemmas/";
 
-    public boolean newFile(String fileName) {
+    public void newFile(String fileName) {
         currentFile = new File(directory + fileName);
-        
-        if (fileExists(fileName)) {
-            try {
-                currentFile.createNewFile();
-            } catch (IOException ex) {
-                Logger.getLogger(FileLogger.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            currentFile.createNewFile();
+        } catch (IOException ex) {
+            Logger.getLogger(FileLogger.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        return fileExists(fileName);
     }
 
     /**
@@ -129,5 +125,10 @@ public class FileLogger {
         }
         
         return synsets;
+    }
+
+    public void saveExpandedSynsets(ProcessedWord pword) {
+        newFile(pword.getLemma());
+        writeHashToFile(pword.getSynsets());
     }
 }

@@ -5,6 +5,8 @@
  */
 package BabelNet;
 
+import it.uniroma1.lcl.babelnet.data.BabelPOS;
+
 /**
  *
  * @author maksym
@@ -20,6 +22,14 @@ public class Edge extends AbstractSynset{
 
     public String getPointer() {
         return pointer;
+    }
+    
+    public String getCompareValue(BabelPOS posTag){
+        if (posTag != BabelPOS.NOUN) {
+            return super.lemma;
+        } else {
+            return pointer;
+        }
     }
     
     @Override

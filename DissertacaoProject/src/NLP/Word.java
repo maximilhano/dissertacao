@@ -11,7 +11,7 @@ package NLP;
  * @author maksym
  */
 public abstract class Word {
-    private String lemma;
+    protected String lemma;
 
     public Word(String lemma) {
         this.lemma = lemma;

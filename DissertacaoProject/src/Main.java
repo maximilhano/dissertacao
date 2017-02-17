@@ -1,8 +1,8 @@
 
 import NLP.ProcessedWord;
 import NLP.NLPmodule;
-import BabelNet.BabelnetModule;
-import java.util.List;
+import Levenshtein.LevenshteinCompare;
+import java.util.HashSet;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,13 +18,16 @@ public class Main {
     public static void main(String[] args) {
         UserInput userInput = new UserInput();
         NLPmodule nlpm = new NLPmodule();
-        BabelnetModule bnm = new BabelnetModule();
+        QueryExpand qe = new QueryExpand();
+        LevenshteinCompare lvn = new LevenshteinCompare();
 
         //userInput.requestUserInput();
         String userQuery = "Quando nasceu o Albert Einstein?" ;//userInput.getUserQuery();   
 
-        List<ProcessedWord> lpw = nlpm.analyzeUserQuery(userQuery);
-        bnm.doRequest(lpw);
+        HashSet<ProcessedWord> lpw = nlpm.analyzeUserQuery(userQuery);
+        lpw = qe.getExpandedQuery(lpw);
+        lvn.calculateDistance(lpw);
+       
         //bnm.printExpandedSynsets();
         
         //System.out.println("\n\tPROCESSED WORDS\n");

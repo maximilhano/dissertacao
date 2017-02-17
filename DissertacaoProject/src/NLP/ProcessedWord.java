@@ -1,6 +1,7 @@
 package NLP;
 
 
+import BabelNet.Edge;
 import BabelNet.Synset;
 import NLP.Word;
 import it.uniroma1.lcl.babelnet.data.BabelPOS;
@@ -36,4 +37,30 @@ public class ProcessedWord extends Word{
     public void setSynsets(HashSet<Synset> synsets) {
         this.synsets = synsets;
     }
+    
+    public HashSet<String> getEdgesLemma(){
+        HashSet<String> output = new HashSet<>();
+        for(Synset synset : synsets){
+            output.addAll(synset.getEdgesLemma());
+        }
+        return output;
+    }
+    
+    public HashSet<Edge> getEdges(){
+        HashSet<Edge> output = new HashSet<>();
+        for(Synset synset : synsets){
+            output.addAll(synset.getEdges());
+        }
+        return output;
+    }
+    
+    
+    public HashSet<String> getEdgesPointer(){
+        HashSet<String> output = new HashSet<>();
+        for(Synset synset : synsets){
+            output.addAll(synset.getEdgesPointer());
+        }
+        return output;
+    }
+    
 }
