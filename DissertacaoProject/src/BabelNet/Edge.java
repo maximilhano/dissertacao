@@ -13,7 +13,7 @@ import it.uniroma1.lcl.babelnet.data.BabelPOS;
  */
 public class Edge extends AbstractSynset{
     
-    private String pointer; // adopting the terms of babelnet
+    private final String pointer; // adopting the terms of babelnet, pointer shows the relation
     
     public Edge( String id, String lemma, String pointer) {
         super(id, lemma);
@@ -26,14 +26,21 @@ public class Edge extends AbstractSynset{
     
     public String getCompareValue(BabelPOS posTag){
         if (posTag != BabelPOS.NOUN) {
-            return super.lemma;
+            return lemma;
         } else {
             return pointer;
         }
     }
-    
+       
     @Override
     public String toString(){
-        return super.getId() + "," + super.getLemma() + "," + pointer + "\n";
+        return id + "," + lemma + "," + pointer + "\n";
     }
+
+    @Override
+    public String getId() {
+        return id; //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 }

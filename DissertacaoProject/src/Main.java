@@ -1,7 +1,7 @@
 
 import NLP.ProcessedWord;
 import NLP.NLPmodule;
-import Levenshtein.LevenshteinCompare;
+import Levenshtein.Compare;
 import java.util.HashSet;
 
 /*
@@ -19,14 +19,14 @@ public class Main {
         UserInput userInput = new UserInput();
         NLPmodule nlpm = new NLPmodule();
         QueryExpand qe = new QueryExpand();
-        LevenshteinCompare lvn = new LevenshteinCompare();
+        Compare lvn = new Compare();
 
         //userInput.requestUserInput();
-        String userQuery = "Quando nasceu o Albert Einstein?" ;//userInput.getUserQuery();   
+        String userQuery = "Onde nasceu o Albert Einstein?" ;//userInput.getUserQuery();   
 
         HashSet<ProcessedWord> lpw = nlpm.analyzeUserQuery(userQuery);
         lpw = qe.getExpandedQuery(lpw);
-        lvn.calculateDistance(lpw);
+        lvn.compareWords(lpw);
        
         //bnm.printExpandedSynsets();
         

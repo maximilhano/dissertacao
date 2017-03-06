@@ -1,9 +1,7 @@
 package BabelNet;
 
-import File.FileLogger;
 import NLP.ProcessedWord;
 import it.uniroma1.lcl.babelnet.BabelNet;
-import it.uniroma1.lcl.babelnet.BabelSense;
 import it.uniroma1.lcl.babelnet.BabelSynset;
 import it.uniroma1.lcl.babelnet.BabelSynsetIDRelation;
 import it.uniroma1.lcl.babelnet.data.BabelPointer;

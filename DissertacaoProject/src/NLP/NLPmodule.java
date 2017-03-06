@@ -166,13 +166,13 @@ public class NLPmodule {
                 resTag = BabelPOS.ADJECTIVE;
                 break;
             case 'C':
-                resTag = BabelPOS.CONJUNCTION;
+                resTag = BabelPOS.CONJUNCTION; // não vai haver 
                 break;
             case 'D':
-                resTag = BabelPOS.DETERMINER;
+                resTag = BabelPOS.DETERMINER; // não vai haver
                 break;
             case 'I':
-                resTag = BabelPOS.INTERJECTION;
+                resTag = BabelPOS.INTERJECTION; // não vai haver
                 break;
             case 'N':
                 resTag = BabelPOS.NOUN;

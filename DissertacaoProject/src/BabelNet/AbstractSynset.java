@@ -8,14 +8,14 @@ package BabelNet;
 import NLP.Word;
 import java.util.HashSet;
 import java.util.Iterator;
-
+import java.util.Objects;
 /**
  *
  * @author maksym
  */
 public abstract class AbstractSynset extends Word{
-    protected String id;
-    protected HashSet<Edge> edges;
+    protected final String id; // id do synset
+    protected HashSet<Edge> edges; 
 
     public AbstractSynset(String id, String lemma) {
         super(lemma);
@@ -32,36 +32,72 @@ public abstract class AbstractSynset extends Word{
     
     public HashSet<String> getEdgesLemma(){
         HashSet<String> output = new HashSet<>();
-        for(Edge edge : edges){
-            output.add(edge.getLemma());
+        
+        Iterator<Edge> i = edges.iterator();
+        while (i.hasNext()) {
+            Edge next = i.next();
+            output.add(next.getLemma());
         }
         return output;
     }
     
     public HashSet<String> getEdgesPointer(){
         HashSet<String> output = new HashSet<>();
-        for(Edge edge : edges){
-            output.add(edge.getPointer());
+        
+        Iterator<Edge> i = edges.iterator();
+        while (i.hasNext()) {
+            Edge next = i.next();
+            output.add(next.getPointer());
         }
         return output;
     }
     
     protected void addEdge(Edge edge){
-        if(!edges.contains(edge)){
-            edges.add(edge);
-        }
+        //if(!edges.contains(edge)){
+        edges.add(edge);
+        //}
     }
 
     public void setEdges(HashSet<Edge> edges) {
         this.edges = edges;
     }
-    
-    public String toStirng(){
-        String output = id + "," + super.getLemma() + "\n";
-        Iterator iterator = edges.iterator();
-        while(iterator.hasNext()){
-            output += iterator.next().toString();
+   
+
+    @Override
+    public String toString() {
+        String output = id + "," + lemma + "\n";
+        
+        Iterator<Edge> i = edges.iterator();
+        while(i.hasNext()){
+            output += i.next().toString();
         }
         return output;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 19 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AbstractSynset other = (AbstractSynset) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }

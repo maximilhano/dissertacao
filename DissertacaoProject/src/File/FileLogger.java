@@ -1,8 +1,9 @@
 package File;
 
-
+import BabelNet.AbstractSynset;
 import BabelNet.Edge;
 import BabelNet.Synset;
+import Levenshtein.SynsetCompare;
 import NLP.ProcessedWord;
 import java.io.*;
 import java.util.ArrayList;
@@ -19,11 +20,13 @@ public class FileLogger {
 
     private File currentFile;
     private final String directory = "lemmas/";
+    PrintWriter pw;
 
     public void newFile(String fileName) {
         currentFile = new File(directory + fileName);
         try {
             currentFile.createNewFile();
+            pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(currentFile), "UTF-8"));
         } catch (IOException ex) {
             Logger.getLogger(FileLogger.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -32,15 +35,17 @@ public class FileLogger {
     /**
      * Retorna a lista de todos os ficheiros referentes a cada lemma existentes
      * na pasta
-     * @return 
+     *
+     * @return
      */
     public HashSet<String> getFileList() {
         HashSet<String> fileList = new HashSet<>();
         File folder = new File(directory);
         File[] listOfFiles = folder.listFiles();
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isFile()) {
-                fileList.add(listOfFiles[i].getName());
+
+        for (File file : listOfFiles) {
+            if (file.isFile()) {
+                fileList.add(file.getName());
             }
         }
         return fileList;
@@ -49,8 +54,13 @@ public class FileLogger {
     public boolean fileExists(String filename) {
         return getFileList().contains(filename);
     }
+    
+    public boolean fileExists(String lemma1, String lemma2) {
+        return getFileList().contains(lemma1+"+"+lemma2);
+    }
 
-    public ArrayList<String> getFileContent(String fileName) {
+    private ArrayList<String> getFileContent(String fileName) { // a razão de fazer com o arraylist, é a leitura linear do ficheiro, 
+                                                                // porque hashset não le por ordem
         ArrayList<String> fileContent = new ArrayList<>();
         try {
             Scanner sc = new Scanner(new File(directory + fileName));
@@ -63,72 +73,77 @@ public class FileLogger {
         return fileContent;
     }
 
-    public void printHash(HashSet<String> hash) {
-        Iterator iterator = hash.iterator();
-        while (iterator.hasNext()) {
-            System.out.println("File line: " + iterator.next());
-        }
+    private void writeLine(String line) {
+        pw.append(line);
     }
 
-    public String[][] getSynsetMatrix(HashSet<String> hashset) {
-        int matrixSize = hashset.size();
-        String[][] outputMatrix = new String[matrixSize][2];
-        Iterator iterator = hashset.iterator();
-        int l = 0;
-
-        while (iterator.hasNext()) {
-            String line = (String) iterator.next();
-            String[] info = line.split(",");
-            outputMatrix[l][0] = info[2];
-            outputMatrix[l][1] = info[4];
-            l++;
-        }
-        return outputMatrix;
-    }
-
-    public void writeHashToFile(HashSet<Synset> hashset) {
-        try {
-            PrintWriter pw = null;
-            pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(currentFile), "UTF-8"));
-            
-            for (Synset synset : hashset) {
-                pw.append(synset.toStirng());
-            }
-            pw.flush();
-            pw.close();
-        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
-            Logger.getLogger(FileLogger.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private void endWrite() {
+        pw.flush();
+        pw.close();
     }
 
     public HashSet<Synset> getExpandedSynsets(String lemma) {
         HashSet<Synset> synsets = new HashSet<>();
         ArrayList<String> fileContent = getFileContent(lemma);
-        Iterator iterator = fileContent.iterator();
-                
+        Iterator<String> i = fileContent.iterator();
+
         Synset synset = null;
         HashSet<Edge> edges = new HashSet<>();
-        
-        while(iterator.hasNext()){
-            String line = (String) iterator.next();
-            String [] info = line.split(",");
-            if(info.length <= 2){
-                if(synset != null){
+
+        while (i.hasNext()) {
+            String line = i.next();
+            String[] lineSplit = line.split(",");
+            if (lineSplit.length <= 2) {
+                if (synset != null) {
                     synset.setEdges(edges);
                     synsets.add(synset);
                     edges.clear();
                 }
-                synset = new Synset(info[0], info[1]);
-            }else{
-               edges.add(new Edge(info[0],info[1],info[2]));
+                synset = new Synset(lineSplit[0], lineSplit[1]);
+            } else {
+                edges.add(new Edge(lineSplit[0], lineSplit[1], lineSplit[2]));
             }
         }
-        
+        synsets.add(synset);
+        System.out.println("Lemma: " + lemma + " SIZE: " + synsets.size());
         return synsets;
     }
 
     public void saveExpandedSynsets(ProcessedWord pword) {
-        newFile(pword.getLemma());
-        writeHashToFile(pword.getSynsets());
+        if (pword != null) {
+            newFile(pword.getLemma());
+            writeHash(pword.getSynsets());
+        }
+    }
+
+    public void saveCompareHash(String lemma1, String lemma2, HashSet<AbstractSynset> compareHash) {
+        if (!compareHash.isEmpty()) {
+            newFile(lemma1 + "+" + lemma2);
+            writeHash(compareHash);
+        }
+
+    }
+
+    private void writeHash(HashSet hashset) {
+        Iterator i = hashset.iterator();
+        while (i.hasNext()) {
+            writeLine(i.next().toString());
+        }
+        endWrite();
+    }
+
+    public HashSet<AbstractSynset> getMatchingSynsets(String lemma, String lemma0) {
+        HashSet<AbstractSynset> output = new HashSet<>();
+        ArrayList<String> fileContent = getFileContent(lemma);
+        Iterator<String> i = fileContent.iterator();
+        
+        while (i.hasNext()) {
+            String next = i.next();
+            String[] nextSplit = next.split(",");
+            System.out.println("FILE: " + nextSplit[0] + " : " + nextSplit[1] + " : " +  nextSplit[2]);
+            //output.add(new Edge(nextSplit[0], nextSplit[1], nextSplit[2]));
+        }
+        
+        return output;
     }
 }

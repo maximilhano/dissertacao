@@ -4,10 +4,11 @@ import BabelNet.BabelnetModule;
 import BabelNet.Synset;
 import File.FileLogger;
 import it.uniroma1.lcl.babelnet.BabelSynset;
-import it.uniroma1.lcl.babelnet.data.BabelPOS;
 import it.uniroma1.lcl.jlt.util.Language;
 import java.util.HashSet;
 import java.util.List;
+import Print.PrintIterator;
+import java.util.Iterator;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -22,7 +23,8 @@ import java.util.List;
 public class QueryExpand {
     
     BabelnetModule bnm = new BabelnetModule();
-    FileLogger fl = new FileLogger();
+    FileLogger fl = new FileLogger(); 
+    PrintIterator it = new PrintIterator();
     
     /**
      * Recebe a lista de palavras processadas, adiciona synsets a cada uma e devolve
@@ -30,14 +32,20 @@ public class QueryExpand {
      * @return a lista de processed words com os synsets 
      */
     public HashSet<ProcessedWord> getExpandedQuery(HashSet<ProcessedWord> pwords){
-        for(ProcessedWord pword: pwords){
-            // verificar se lemmas já existem na pasta
-            if(fl.fileExists(pword.getLemma())){
-                pword.setSynsets(fl.getExpandedSynsets(pword.getLemma()));
+        
+        Iterator<ProcessedWord> i = pwords.iterator();
+        
+        while (i.hasNext()) {
+            ProcessedWord next = i.next();
+            
+            if(fl.fileExists(next.getLemma())){ // verificar se lemmas já existem na pasta
+                System.out.println("O lemma: " + next.getLemma());
+                next.setSynsets(fl.getExpandedSynsets(next.getLemma()));
             }else{
-                List<BabelSynset> synsets = bnm.getSynsets(pword);
-                pword.setSynsets(getExpandedSynsets(synsets));
-                //fl.saveExpandedSynsets(pword);
+                List<BabelSynset> synsets = bnm.getSynsets(next);
+                next.setSynsets(getExpandedSynsets(synsets));
+                fl.saveExpandedSynsets(next);
+                it.BabelSynset(synsets);
             }
         }
         return pwords;
@@ -46,12 +54,13 @@ public class QueryExpand {
     private HashSet<Synset> getExpandedSynsets(List<BabelSynset> babelSynsets){
         HashSet<Synset> synsets = new HashSet<>();
         
-        for(BabelSynset babelSynset : babelSynsets){
-            Synset synset = new Synset(babelSynset.getMainSense(Language.EN).getLemma(), babelSynset.getId().toString());
-            synset.setEdges(bnm.getEdges(0, babelSynset));
+        Iterator<BabelSynset> i = babelSynsets.iterator();
+        while (i.hasNext()) {
+            BabelSynset next = i.next();
+            Synset synset = new Synset(next.getId().toString(), next.getMainSense(Language.EN).getLemma());
+            synset.setEdges(bnm.getEdges(0, next));
             synsets.add(synset);
         }
-        
         return synsets;
     } 
 }
