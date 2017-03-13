@@ -40,28 +40,28 @@ public class Compare {
 
         HashSet<AbstractSynset> matchingHash = new HashSet<>();
 
-        if (fl.fileExists(pword1.getLemma(), pword2.getLemma())) {
-            matchingHash = fl.getMatchingSynsets(pword1.getLemma(), pword2.getLemma());
-        } else {
-            HashSet<Edge> pword1Data = pword1.getEdges();
-            HashSet<Edge> pword2Data = pword2.getEdges();
-
-            Iterator<Edge> iterator1 = pword1Data.iterator();
-
-            while (iterator1.hasNext()) {
-                Edge e1 = iterator1.next();
-
-                Iterator<Edge> iterator2 = pword2Data.iterator();
-                while (iterator2.hasNext()) {
-                    Edge e2 = iterator2.next();
-
-                    if (e1.getCompareValue(pword1.getPosTag()).contains(e2.getCompareValue(pword2.getPosTag()))
-                            || e2.getCompareValue(pword2.getPosTag()).contains(e1.getCompareValue(pword1.getPosTag()))) {
-                        matchingHash.add(e2);
-                    }
-                }
-            }
-        }
+//        if (fl.fileExists(pword1.getLemma(), pword2.getLemma())) {
+//            matchingHash = fl.getMatchingSynsets(pword1.getLemma(), pword2.getLemma());
+//        } else {
+//            HashSet<Edge> pword1Data = pword1.getEdges();
+//            HashSet<Edge> pword2Data = pword2.getEdges();
+//
+//            Iterator<Edge> iterator1 = pword1Data.iterator();
+//
+//            while (iterator1.hasNext()) {
+//                Edge e1 = iterator1.next();
+//
+//                Iterator<Edge> iterator2 = pword2Data.iterator();
+//                while (iterator2.hasNext()) {
+//                    Edge e2 = iterator2.next();
+//
+//                    if (e1.getCompareValue(pword1.getPosTag()).contains(e2.getCompareValue(pword2.getPosTag()))
+//                            || e2.getCompareValue(pword2.getPosTag()).contains(e1.getCompareValue(pword1.getPosTag()))) {
+//                        matchingHash.add(e2);
+//                    }
+//                }
+//            }
+//        }
 
         return matchingHash;
     }

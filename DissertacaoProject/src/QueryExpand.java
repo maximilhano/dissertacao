@@ -8,6 +8,8 @@ import it.uniroma1.lcl.jlt.util.Language;
 import java.util.HashSet;
 import java.util.List;
 import Print.PrintIterator;
+import it.uniroma1.lcl.babelnet.data.BabelPOS;
+import java.io.IOException;
 import java.util.Iterator;
 
 /*
@@ -31,23 +33,28 @@ public class QueryExpand {
      * @param pwords
      * @return a lista de processed words com os synsets 
      */
-    public HashSet<ProcessedWord> getExpandedQuery(HashSet<ProcessedWord> pwords){
+    public HashSet<ProcessedWord> getExpandedQuery(HashSet<ProcessedWord> pwords) throws IOException{
         
         Iterator<ProcessedWord> i = pwords.iterator();
         
         while (i.hasNext()) {
             ProcessedWord next = i.next();
-            
-            if(fl.fileExists(next.getLemma())){ // verificar se lemmas já existem na pasta
-                System.out.println("O lemma: " + next.getLemma());
-                next.setSynsets(fl.getExpandedSynsets(next.getLemma()));
-            }else{
-                List<BabelSynset> synsets = bnm.getSynsets(next);
-                next.setSynsets(getExpandedSynsets(synsets));
-                fl.saveExpandedSynsets(next);
-                it.BabelSynset(synsets);
-            }
+            next.setDefinitions(bnm.getBabelNetData(next.getLemma(), next.getPosTag()));
+            System.out.println("\t ProcessedWord: " +next.getLemma() + " has definitions: " + next.getDefinitions());
         }
+        
+        
+//
+//            if(fl.fileExists(next.getLemma())){ // verificar se lemmas já existem na pasta
+//                System.out.println("O lemma: " + next.getLemma());
+//                next.setSynsets(fl.getExpandedSynsets(next.getLemma()));
+//            }else{
+//                List<BabelSynset> synsets = bnm.getSynsets(next);
+//                next.setSynsets(getExpandedSynsets(synsets));
+//                fl.saveExpandedSynsets(next);
+//                it.BabelSynset(synsets);
+//            }
+        //}
         return pwords;
     }
     

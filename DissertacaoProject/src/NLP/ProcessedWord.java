@@ -20,7 +20,7 @@ import java.util.Iterator;
  */
 public class ProcessedWord extends Word{
     private final BabelPOS posTag;
-    private HashSet<Synset> synsets = new HashSet<>();
+    private HashSet<String> definitions;
 
     public ProcessedWord(String lemma, BabelPOS posTag) {
         super(lemma);
@@ -31,46 +31,12 @@ public class ProcessedWord extends Word{
         return posTag;
     }
 
-    public HashSet<Synset> getSynsets() {
-        return synsets;
+    public HashSet<String> getDefinitions() {
+        return definitions;
     }
 
-    public void setSynsets(HashSet<Synset> synsets) {
-        this.synsets = synsets;
+    public void setDefinitions(HashSet<String> definitions) {
+        this.definitions = definitions;
     }
-    
-    public HashSet<String> getEdgesLemma(){
-        HashSet<String> output = new HashSet<>();
-        
-        Iterator<Synset> i = synsets.iterator();
-        while (i.hasNext()) {
-            output.addAll(i.next().getEdgesLemma());
-        }
-        return output;
-    }
-    
-    public HashSet<Edge> getEdges(){
-        HashSet<Edge> output = new HashSet<>();
-        
-        Iterator<Synset> i = synsets.iterator();
-        while (i.hasNext()) {
-            Synset next = i.next();
-            if(next.getEdges() != null){
-                output.addAll(next.getEdges());
-            }
-        }
-        return output;
-    }
-    
-    
-    public HashSet<String> getEdgesPointer(){
-        HashSet<String> output = new HashSet<>();
-        
-        Iterator<Synset> i = synsets.iterator();
-        while (i.hasNext()) {
-            output.addAll(i.next().getEdgesPointer());
-        }
-        return output;
-    }
-    
+
 }

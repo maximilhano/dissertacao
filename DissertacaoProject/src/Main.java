@@ -37,11 +37,11 @@ public class Main {
                 String userQuery = input.readLine();
                 HashSet<ProcessedWord> lpw = nlpm.analyzeUserQuery(userQuery);
                 Iterator<ProcessedWord> i = lpw.iterator();
-                while (i.hasNext()) {
-                    ProcessedWord next = i.next();
-                    System.out.println("Word :" + next.getLemma() + " POS identifier: " + next.getPosTag());
-                }
-                //lpw = qe.getExpandedQuery(lpw);
+//                while (i.hasNext()) {
+//                    ProcessesdWord next = i.next();
+//                    System.out.println("Word :" + next.getLemma() + " POS identifier: " + next.getPosTag());
+//                }
+                lpw = qe.getExpandedQuery(lpw);
                 //lvn.compareWords(lpw);
             }
         } catch (UnsupportedEncodingException ex) {

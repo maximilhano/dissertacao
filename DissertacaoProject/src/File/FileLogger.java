@@ -110,10 +110,10 @@ public class FileLogger {
     }
 
     public void saveExpandedSynsets(ProcessedWord pword) {
-        if (pword != null && !pword.getSynsets().isEmpty()) {
-            newFile(pword.getLemma());
-            writeHash(pword.getSynsets());
-        }
+//        if (pword != null && !pword.getSynsets().isEmpty()) {
+//            newFile(pword.getLemma());
+//            writeHash(pword.getSynsets());
+//        }
     }
 
     public void saveCompareHash(String lemma1, String lemma2, HashSet<AbstractSynset> compareHash) {
