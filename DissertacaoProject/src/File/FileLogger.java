@@ -110,7 +110,7 @@ public class FileLogger {
     }
 
     public void saveExpandedSynsets(ProcessedWord pword) {
-        if (pword != null) {
+        if (pword != null && !pword.getSynsets().isEmpty()) {
             newFile(pword.getLemma());
             writeHash(pword.getSynsets());
         }

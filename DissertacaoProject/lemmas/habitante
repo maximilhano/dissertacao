@@ -1,0 +1,55 @@
+bn:00026239n,dweller
+bn:00047614n,islander,Hyponym
+bn:00062124n,Phrygian,Hyponym
+bn:00073210n,species,Hypernym
+bn:00007277n,Austronesian,Hyponym
+bn:00080933n,westerner,Hyponym
+bn:00058564n,occupant,Hyponym
+bn:00051624n,liver,Hyponym
+bn:00050162n,Latin,Hyponym
+bn:00049276n,Kiwi,Hyponym
+bn:00006331n,Asian,Hyponym
+bn:00080004n,villager,Hyponym
+bn:00029445n,earthling,Hyponym
+bn:00003099n,Alsatian,Hyponym
+bn:00029532n,easterner,Hyponym
+bn:00044292n,Hittite,Hyponym
+bn:00061969n,Philistine,Hyponym
+bn:00000356n,home,Gloss related form (disambiguated)
+bn:00058541n,Occidental,Hyponym
+bn:00031898n,European,Hyponym
+bn:00037076n,Galilean,Hyponym
+bn:00007214n,Aussie,Hyponym
+bn:00046516n,person,Gloss related form (disambiguated)
+bn:00058095n,Northerner,Hyponym
+bn:00023061n,cottage_dweller,Hyponym
+bn:00012222n,borderer,Hyponym
+bn:00078307n,Trinidadian,Hyponym
+bn:00003345n,American,Hyponym
+bn:00003343n,American,Hyponym
+bn:00062754n,plainsman,Hyponym
+bn:00058310n,Numidian,Hyponym
+bn:00087441v,live,Derivationally related form
+bn:00049879n,landman,Hyponym
+bn:00053364n,marcher,Hyponym
+bn:00057093n,Nazarene,Hyponym
+bn:14483122n,inhabitant
+bn:00046516n,person,subclass_of
+bn:00056337n,municipality,Hypernym
+bn:00072566n,society,Hypernym
+bn:00458127n,Habitants
+bn:00026239n,dweller,Hypernym
+bn:00063596n,population
+bn:00073210n,species,Gloss related form (disambiguated)
+bn:00103595a,given,Gloss related form (disambiguated)
+bn:01169511n,World_population,Hyponym
+bn:03202526n,one-child_policy,Hyponym
+bn:00005513n,area,Gloss related form (disambiguated)
+bn:00009677n,being,Hypernym
+bn:00041942n,group,Hypernym
+bn:00017097n,census,Hyponym
+bn:00059899n,overpopulation,Hyponym
+bn:00033595n,famine,Hyponym
+bn:15459640n,overpopulation,Hyponym
+bn:00065801n,subspecies,Hyponym
+bn:00030746n,endangered_species,Hyponym
