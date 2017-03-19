@@ -37,10 +37,10 @@ public class Main {
                 String userQuery = input.readLine();
                 HashSet<ProcessedWord> lpw = nlpm.analyzeUserQuery(userQuery);
                 Iterator<ProcessedWord> i = lpw.iterator();
-//                while (i.hasNext()) {
-//                    ProcessesdWord next = i.next();
-//                    System.out.println("Word :" + next.getLemma() + " POS identifier: " + next.getPosTag());
-//                }
+                while (i.hasNext()) {
+                    ProcessedWord next = i.next();
+                    System.out.println("Word :" + next.getLemma() + " POS identifier: " + next.getPosTag());
+                }
                 lpw = qe.getExpandedQuery(lpw);
                 //lvn.compareWords(lpw);
             }
@@ -49,14 +49,5 @@ public class Main {
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        //bnm.printExpandedSynsets();
-        //System.out.println("\n\tPROCESSED WORDS\n");
-        /*for(ProcessedWord pw : lpw){
-            pw.printInfo();
-            //bnm.printEdges(bnm.getSynsets(pw));
-        }*/
-        //bnm.printSenses(lpw);
-        //bnm.printSynsets(lpw);
     }
 }

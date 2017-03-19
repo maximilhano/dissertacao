@@ -133,6 +133,10 @@ public class NLPmodule {
         
         while (sIt.hasNext()) {
             Sentence s = sIt.next();
+            
+            this.printDepTree(0, this.getDepTree(s));
+            this.printParseTree(0, this.getParseTree(s));
+            
             ListWordIterator wIt = new ListWordIterator(s);
             while (wIt.hasNext()) {
                 Word w = wIt.next();
@@ -151,8 +155,8 @@ public class NLPmodule {
 
         while (sIt.hasNext()) {
             Sentence s = sIt.next();
-            //this.printDepTree(0, this.getDepTree(s));
-            //this.printParseTree(0, this.getParseTree(s));
+            this.printDepTree(0, this.getDepTree(s));
+            this.printParseTree(0, this.getParseTree(s));
             this.wordIterator(s);
         }
     }
@@ -160,7 +164,7 @@ public class NLPmodule {
     private BabelPOS posIdentifier(String tag) {
         BabelPOS resTag =null;
         char tagFirstChar = tag.charAt(0);
-        
+        System.out.println("\t FREELING tag: " + tag);
         switch (tagFirstChar) {
             case 'A':
                 resTag = BabelPOS.ADJECTIVE;
@@ -193,6 +197,7 @@ public class NLPmodule {
                 //resTag = "number";
                 break;
             case 'W':
+                //System.out.println("data");
                 //resTag = "date";
                 break;
         }

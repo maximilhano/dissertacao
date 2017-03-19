@@ -8,9 +8,9 @@ import it.uniroma1.lcl.jlt.util.Language;
 import java.util.HashSet;
 import java.util.List;
 import Print.PrintIterator;
-import it.uniroma1.lcl.babelnet.data.BabelPOS;
 import java.io.IOException;
 import java.util.Iterator;
+import DBpedia.BDpediaModule;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -27,7 +27,8 @@ public class QueryExpand {
     BabelnetModule bnm = new BabelnetModule();
     FileLogger fl = new FileLogger(); 
     PrintIterator it = new PrintIterator();
-    
+    BDpediaModule dbm = new BDpediaModule();
+     
     /**
      * Recebe a lista de palavras processadas, adiciona synsets a cada uma e devolve
      * @param pwords
@@ -41,6 +42,13 @@ public class QueryExpand {
             ProcessedWord next = i.next();
             next.setDefinitions(bnm.getBabelNetData(next.getLemma(), next.getPosTag()));
             System.out.println("\t ProcessedWord: " +next.getLemma() + " has definitions: " + next.getDefinitions());
+            
+//            System.out.println("\n\t DBPEDIA results \n");
+//            Iterator<String> it = next.getDefinitions().iterator();
+//            while (it.hasNext()) {
+//                String next1 = it.next();
+//                dbm.getTriples(next1);
+//            }
         }
         
         
