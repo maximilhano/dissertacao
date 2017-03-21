@@ -1,3 +1,5 @@
+package Semantic;
+
 
 import NLP.ProcessedWord;
 import BabelNet.BabelnetModule;
@@ -22,10 +24,9 @@ import DBpedia.BDpediaModule;
  *
  * @author maksym
  */
-public class QueryExpand {
+public class SemanticAnalysis {
     
     BabelnetModule bnm = new BabelnetModule();
-    FileLogger fl = new FileLogger(); 
     PrintIterator it = new PrintIterator();
     BDpediaModule dbm = new BDpediaModule();
      
@@ -40,8 +41,8 @@ public class QueryExpand {
         
         while (i.hasNext()) {
             ProcessedWord next = i.next();
-            next.setDefinitions(bnm.getBabelNetData(next.getLemma(), next.getPosTag()));
-            System.out.println("\t ProcessedWord: " +next.getLemma() + " has definitions: " + next.getDefinitions());
+            next.setSynsets(bnm.getBabelNetData(next.getLemma(), next.getPosTag()));
+            System.out.println("\t ProcessedWord: " +next.getLemma() + " has definitions: " + next.getSynsets());
             
 //            System.out.println("\n\t DBPEDIA results \n");
 //            Iterator<String> it = next.getDefinitions().iterator();

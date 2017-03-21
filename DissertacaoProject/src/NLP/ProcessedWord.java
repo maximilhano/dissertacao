@@ -1,12 +1,7 @@
 package NLP;
 
-
-import BabelNet.Edge;
-import BabelNet.Synset;
-import NLP.Word;
 import it.uniroma1.lcl.babelnet.data.BabelPOS;
 import java.util.HashSet;
-import java.util.Iterator;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -20,7 +15,7 @@ import java.util.Iterator;
  */
 public class ProcessedWord extends Word{
     private final BabelPOS posTag;
-    private HashSet<String> definitions;
+    private HashSet<String> synsets;
 
     public ProcessedWord(String lemma, BabelPOS posTag) {
         super(lemma);
@@ -31,12 +26,12 @@ public class ProcessedWord extends Word{
         return posTag;
     }
 
-    public HashSet<String> getDefinitions() {
-        return definitions;
+    public HashSet<String> getSynsets() {
+        return synsets;
     }
 
-    public void setDefinitions(HashSet<String> definitions) {
-        this.definitions = definitions;
+    public void setSynsets(HashSet<String> synsets) {
+        this.synsets = synsets;
     }
 
 }

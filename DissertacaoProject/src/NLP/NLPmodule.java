@@ -182,7 +182,8 @@ public class NLPmodule {
                 resTag = BabelPOS.NOUN;
                 break;
             case 'P':
-                resTag = BabelPOS.PRONOUN;
+                //resTag = BabelPOS.PRONOUN;
+                resTag = BabelPOS.ADVERB;
                 break;
             case 'R':
                 resTag = BabelPOS.ADVERB;

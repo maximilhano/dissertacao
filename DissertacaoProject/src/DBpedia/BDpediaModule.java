@@ -5,7 +5,6 @@
  */
 package DBpedia;
 
-import java.util.HashSet;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
@@ -42,7 +41,8 @@ public class BDpediaModule {
         String query = PREFIX
                 + "SELECT ?p ?o ?type WHERE "
                 + "{ :" + value + " ?p ?o ."
-                + "?o rdf:type ?type .}";
+                + "?p rdf:type ?ptype . "
+                + "?o rdf:type ?otype . }";
 
         System.out.println("\n\t SELECT QUERY: " + query);
 

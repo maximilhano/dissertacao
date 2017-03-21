@@ -1,7 +1,9 @@
 
+import Semantic.SemanticAnalysis;
 import NLP.ProcessedWord;
 import NLP.NLPmodule;
 import Levenshtein.Compare;
+import QuestionsAnswers.Question;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,8 +27,10 @@ public class Main {
     public static void main(String[] args) {
         UserInput userInput = new UserInput();
         NLPmodule nlpm = new NLPmodule();
-        QueryExpand qe = new QueryExpand();
+        SemanticAnalysis sa = new SemanticAnalysis();
         Compare lvn = new Compare();
+        
+        Question question;
 
         //userInput.requestUserInput();
         //String userQuery = "Onde nasceu o Albert Einstein?" ;//userInput.getUserQuery();   
@@ -35,13 +39,16 @@ public class Main {
                 System.out.println("Waiting for user input: ");
                 BufferedReader input = new BufferedReader(new InputStreamReader(System.in, "utf-8"));
                 String userQuery = input.readLine();
-                HashSet<ProcessedWord> lpw = nlpm.analyzeUserQuery(userQuery);
-                Iterator<ProcessedWord> i = lpw.iterator();
-                while (i.hasNext()) {
-                    ProcessedWord next = i.next();
-                    System.out.println("Word :" + next.getLemma() + " POS identifier: " + next.getPosTag());
-                }
-                lpw = qe.getExpandedQuery(lpw);
+                
+                question = new Question(userQuery, nlpm, sa);
+                
+//                HashSet<ProcessedWord> lpw = nlpm.analyzeUserQuery(userQuery);
+//                Iterator<ProcessedWord> i = lpw.iterator();
+//                while (i.hasNext()) {
+//                    ProcessedWord next = i.next();
+//                    System.out.println("Word :" + next.getLemma() + " POS identifier: " + next.getPosTag());
+//                }
+//                lpw = sa.getExpandedQuery(lpw);
                 //lvn.compareWords(lpw);
             }
         } catch (UnsupportedEncodingException ex) {
