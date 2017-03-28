@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,35 +21,33 @@ import java.util.List;
  */
 public class Question {
 
-    private final String question;
-    private HashSet<ProcessedWord> lpw;
+    private final NLPmodule nlpm;
+    private final QuestionTypeAnalysis questionTypeAnalysis;
+    private final AnswerTypeAnalysis answerTypeAnalysis;
+    private final SemanticAnalysis semanticAnalysis;
+
     private final QuestionTypes questionType;
     private final List<String> answerType;
 
-    private final NLPmodule nlpm;
-    private final SemanticAnalysis sa;
-    private final QuestionTypeAnalysis qta = new QuestionTypeAnalysis();
-    private final AnswerTypeAnalysis ata = new AnswerTypeAnalysis();
-
-    public Question(String question, NLPmodule nlpm, SemanticAnalysis sa) throws IOException {
-        this.question = question;
+    private final String userQuery;
+    private HashSet<ProcessedWord> processedWordList;
+    
+    public Question(NLPmodule nlpm, QuestionTypeAnalysis questionTypeAnalysis, AnswerTypeAnalysis answerTypeAnalysis, SemanticAnalysis semanticAnalysis, String userQuery) {
         this.nlpm = nlpm;
-        this.sa = sa;
-
-        lpw = this.nlpm.analyzeUserQuery(this.question);
-
-        Iterator<ProcessedWord> i = lpw.iterator();
-        while (i.hasNext()) {
-            ProcessedWord next = i.next();
-            System.out.println("Word :" + next.getLemma() + " POS identifier: " + next.getPosTag());
+        this.questionTypeAnalysis = questionTypeAnalysis;
+        this.answerTypeAnalysis = answerTypeAnalysis;
+        this.semanticAnalysis = semanticAnalysis;
+        this.userQuery = userQuery;
+        
+        processedWordList = this.nlpm.analyzeUserQuery(this.userQuery);
+        questionType = this.questionTypeAnalysis.getQuestionType(processedWordList);
+        answerType = this.answerTypeAnalysis.getAnswerType(questionType);
+        
+        try {
+            processedWordList = this.semanticAnalysis.setSemanticData(processedWordList);
+        } catch (IOException ex) {
+            Logger.getLogger(Question.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        questionType = qta.getQuestionType(lpw);
-        answerType = ata.getAnswerType(questionType);
-        
-        lpw = sa.getExpandedQuery(lpw);
-        
-        System.out.println(answerType);
     }
-
 }

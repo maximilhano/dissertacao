@@ -33,6 +33,7 @@ public class QuestionTypeAnalysis {
                     case "quanto":
                         return QuestionTypes.HOW;
                 }
+                it.remove(); // remove adverb from list
             }
         }
         return null;

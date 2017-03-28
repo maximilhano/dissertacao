@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  */
 public class BabelnetModule {
 
-    private final BabelNet bn = BabelNet.getInstance();
+    private final BabelNet babelNet = BabelNet.getInstance();
     private final Language LANG = Language.PT;
     private final Language sLANG = Language.EN;
 
@@ -35,13 +35,24 @@ public class BabelnetModule {
      * (sinonimos) de uma dada palavra
      *
      * @param lemma
-     * @param pos
+     * @param posTag
      * @return
      */
-    public List<BabelSynset> getSynsets(String lemma, BabelPOS pos) {
+    public List<BabelSynset> getSynsets(String lemma, BabelPOS posTag) {
         List<BabelSynset> result = null;
+        
+        switch (posTag) {
+                case NOUN:
+                    result = babelNet.getSynsets(next.getLemma(), LANG, BabelPOS.NOUN, BabelSenseSource.WIKI));
+                default:
+                    it = babelNet.getSynsets(lemma, LANG).iterator();
+                    break;
+            }
+        
+        
+        
         try {
-            result = bn.getSynsets(lemma, LANG, pos);
+            result = babelNet.getSynsets(lemma, LANG, posTag);
         } catch (IOException ex) {
             Logger.getLogger(BabelnetModule.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -75,23 +86,26 @@ public class BabelnetModule {
         return edges;
     }
 
-    public HashSet<String> getBabelNetData(String lemma, BabelPOS pos) throws IOException {
-        HashSet<String> result = new HashSet<>();
-        Iterator<BabelSynset> it = null;
+    public HashSet<ProcessedWord> setSemanticData(HashSet<ProcessedWord> pwords) throws IOException {
+        Iterator<ProcessedWord> it = lpw.iterator();
 
-        switch (pos) {
-            case NOUN:
-                it = bn.getSynsets(lemma, LANG, BabelPOS.NOUN, BabelSenseSource.WIKI).iterator();
-            default:
-                it = bn.getSynsets(lemma, LANG).iterator();
-                break;
+        while (it.hasNext()) {
+            ProcessedWord next = it.next();
+
+            switch (next.getPosTag()) {
+                case NOUN:
+                    next.setSynsets(babelNet.getSynsets(next.getLemma(), LANG, BabelPOS.NOUN, BabelSenseSource.WIKI));
+                default:
+                    it = babelNet.getSynsets(lemma, LANG).iterator();
+                    break;
+            }
         }
 
         while (it.hasNext()) {
             result.add(it.next().getMainSense(sLANG).getLemma());
         }
 
-        return result;
+        return lpw;
     }
 
     private boolean isRightPointer(BabelPointer pointer) {

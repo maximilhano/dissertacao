@@ -3,7 +3,9 @@ import Semantic.SemanticAnalysis;
 import NLP.ProcessedWord;
 import NLP.NLPmodule;
 import Levenshtein.Compare;
+import QuestionsAnswers.AnswerTypeAnalysis;
 import QuestionsAnswers.Question;
+import QuestionsAnswers.QuestionTypeAnalysis;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,12 +27,16 @@ import java.util.logging.Logger;
 public class Main {
 
     public static void main(String[] args) {
-        UserInput userInput = new UserInput();
-        NLPmodule nlpm = new NLPmodule();
-        SemanticAnalysis sa = new SemanticAnalysis();
-        Compare lvn = new Compare();
+        //UserInput userInput = new UserInput();
         
-        Question question;
+        //Compare lvn = new Compare();
+        
+        NLPmodule nlpm = new NLPmodule();
+        QuestionTypeAnalysis questionTypeAnalysis = new QuestionTypeAnalysis();
+        AnswerTypeAnalysis answerTypeAnalysis = new AnswerTypeAnalysis();
+        SemanticAnalysis semanticAnalysis = new SemanticAnalysis();
+
+        Question question = null;
 
         //userInput.requestUserInput();
         //String userQuery = "Onde nasceu o Albert Einstein?" ;//userInput.getUserQuery();   
@@ -39,16 +45,16 @@ public class Main {
                 System.out.println("Waiting for user input: ");
                 BufferedReader input = new BufferedReader(new InputStreamReader(System.in, "utf-8"));
                 String userQuery = input.readLine();
-                
-                question = new Question(userQuery, nlpm, sa);
-                
+
+                question = new Question(nlpm, questionTypeAnalysis, answerTypeAnalysis, semanticAnalysis, userQuery);
+
 //                HashSet<ProcessedWord> lpw = nlpm.analyzeUserQuery(userQuery);
 //                Iterator<ProcessedWord> i = lpw.iterator();
 //                while (i.hasNext()) {
 //                    ProcessedWord next = i.next();
 //                    System.out.println("Word :" + next.getLemma() + " POS identifier: " + next.getPosTag());
 //                }
-//                lpw = sa.getExpandedQuery(lpw);
+//                lpw = semanticAnalysis.setSemanticData(lpw);
                 //lvn.compareWords(lpw);
             }
         } catch (UnsupportedEncodingException ex) {
