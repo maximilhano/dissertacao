@@ -8,6 +8,7 @@ import NLP.ProcessedWord;
 import it.uniroma1.lcl.babelnet.BabelNet;
 import it.uniroma1.lcl.babelnet.BabelSynset;
 import it.uniroma1.lcl.babelnet.BabelSynsetIDRelation;
+import it.uniroma1.lcl.babelnet.BabelSynsetType;
 import it.uniroma1.lcl.babelnet.data.BabelPOS;
 import it.uniroma1.lcl.babelnet.data.BabelPointer;
 import it.uniroma1.lcl.babelnet.data.BabelSenseSource;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,8 +60,8 @@ public class SemanticAnalysis {
         return processedWordList;
     }
 
-    private HashSet<String> getSynsets(String lemma, BabelPOS posTag) throws IOException {
-        HashSet<String> result = null;
+    private Map<String,BabelSynsetType> getSynsets(String lemma, BabelPOS posTag) throws IOException {
+        Map<String,BabelSynsetType> result = null;
         List<BabelSynset> babelSynsets = null;
 
         switch (posTag) {
@@ -75,9 +77,8 @@ public class SemanticAnalysis {
         
         while (synsetIterator.hasNext()) {
             BabelSynset babelSynset = synsetIterator.next();
-            result.add(babelSynset.getMainSense(sLANG).getLemma());
+            result.put(babelSynset.getMainSense(sLANG).getLemma(),babelSynset.getSynsetType());
         }
-
         return result;
     }
 

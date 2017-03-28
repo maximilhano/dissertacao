@@ -5,6 +5,12 @@
  */
 package Database;
 
+import NLP.ProcessedWord;
+import it.uniroma1.lcl.babelnet.BabelSynsetType;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+
 /**
  *
  * @author maksym
@@ -26,7 +32,53 @@ public class LocalDatabase {
             + "PREFIX dbpedia2: <http://dbpedia.org/property/>\n"
             + "PREFIX dbpedia: <http://dbpedia.org/>\n"
             + "PREFIX dbo: <http://dbpedia.org/ontology/>\n"
-            + "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n";
+            + "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ";
     
+    private String selectQuery = PREFIX;
+
+    public void getTriples(HashSet<ProcessedWord> processedWordList) {
+        Iterator<ProcessedWord> it = processedWordList.iterator();
+        while (it.hasNext()) {
+            ProcessedWord processedWord = it.next();
+            Map<String, BabelSynsetType> processedWordSynsets = processedWord.getSynsets();
+            
+            for(Map.Entry<String, BabelSynsetType> entry : processedWordSynsets.entrySet() ){
+                String synset = entry.getKey();
+                BabelSynsetType synsetType = entry.getValue();
+                
+                switch(synsetType){
+                        case NAMED_ENTITY:
+                            constructNamedEntityQuery(synset);
+                            break;
+                        case CONCEPT:
+                            break;
+                        default:
+                            break;
+                }
+            }
+        }
+    }
     
+    private void getPredicates(String object){
+        
+    }
+    
+    private void getObject(){
+        
+    }
+    
+    private void constructNamedEntityQuery(String namedEntity){
+        selectQuery += "SELECT ?p ?o ?type WHERE "
+                     + "{ :" + namedEntity + " ?p ?o ."
+                     + "?p rdf:type ?ptype . "
+                     + "?o rdf:type ?otype . }";
+    }
+    
+    private void runSelectQuery(String query){
+        
+    }
+    
+    private void runUpdateQuery(String query){
+        
+    }
 }

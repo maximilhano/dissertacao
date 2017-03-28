@@ -26,11 +26,12 @@ public class Question {
     private final AnswerTypeAnalysis answerTypeAnalysis;
     private final SemanticAnalysis semanticAnalysis;
 
-    private final QuestionTypes questionType;
-    private final List<String> answerType;
+    //private final QuestionTypes questionType;
+    //private final List<String> answerType;
 
     private final String userQuery;
     private HashSet<ProcessedWord> processedWordList;
+    private final String questionFocusEntity;
 
     public Question(NLPmodule nlpm, QuestionTypeAnalysis questionTypeAnalysis, AnswerTypeAnalysis answerTypeAnalysis, SemanticAnalysis semanticAnalysis, String userQuery) {
         this.nlpm = nlpm;
@@ -40,10 +41,14 @@ public class Question {
         this.userQuery = userQuery;
 
         processedWordList = this.nlpm.analyzeUserQuery(this.userQuery);
-        questionType = this.questionTypeAnalysis.getQuestionType(processedWordList);
-        answerType = this.answerTypeAnalysis.getAnswerType(questionType);
-        processedWordList = this.semanticAnalysis.setSemanticData(processedWordList);
+        //questionType = this.questionTypeAnalysis.getQuestionType(processedWordList);
+        //answerType = this.answerTypeAnalysis.getAnswerType(questionType);
+        //processedWordList = this.semanticAnalysis.setSemanticData(processedWordList);
         
+        
+    }
+    
+    private void setQuestionFocusEntity(){
         
     }
 }

@@ -1,7 +1,9 @@
 package NLP;
 
+import it.uniroma1.lcl.babelnet.BabelSynsetType;
 import it.uniroma1.lcl.babelnet.data.BabelPOS;
 import java.util.HashSet;
+import java.util.Map;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,7 +17,8 @@ import java.util.HashSet;
  */
 public class ProcessedWord extends Word{
     private final BabelPOS posTag;
-    private HashSet<String> synsets;
+    //private HashSet<String> synsets;
+    private Map<String,BabelSynsetType> synsets;
 
     public ProcessedWord(String lemma, BabelPOS posTag) {
         super(lemma);
@@ -26,11 +29,11 @@ public class ProcessedWord extends Word{
         return posTag;
     }
 
-    public HashSet<String> getSynsets() {
+    public Map<String,BabelSynsetType> getSynsets() {
         return synsets;
     }
 
-    public void setSynsets(HashSet<String> synsets) {
+    public void setSynsets(Map<String,BabelSynsetType> synsets) {
         this.synsets = synsets;
     }
 
