@@ -1,8 +1,6 @@
 
 import Semantic.SemanticAnalysis;
-import NLP.ProcessedWord;
 import NLP.NLPmodule;
-import Levenshtein.Compare;
 import QuestionsAnswers.AnswerTypeAnalysis;
 import QuestionsAnswers.Question;
 import QuestionsAnswers.QuestionTypeAnalysis;
@@ -10,8 +8,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
