@@ -36,28 +36,7 @@ public class LocalDatabase {
     
     private String selectQuery = PREFIX;
 
-    public void getTriples(HashSet<ProcessedWord> processedWordList) {
-        Iterator<ProcessedWord> it = processedWordList.iterator();
-        while (it.hasNext()) {
-            ProcessedWord processedWord = it.next();
-            Map<String, BabelSynsetType> processedWordSynsets = processedWord.getSynsets();
-            
-            for(Map.Entry<String, BabelSynsetType> entry : processedWordSynsets.entrySet() ){
-                String synset = entry.getKey();
-                BabelSynsetType synsetType = entry.getValue();
-                
-                switch(synsetType){
-                        case NAMED_ENTITY:
-                            constructNamedEntityQuery(synset);
-                            break;
-                        case CONCEPT:
-                            break;
-                        default:
-                            break;
-                }
-            }
-        }
-    }
+    
     
     private void getPredicates(String object){
         
@@ -79,6 +58,10 @@ public class LocalDatabase {
     }
     
     private void runUpdateQuery(String query){
+        
+    }
+
+    public HashSet<String> getTriples(HashSet<String> entitiesInQuestion, HashSet<String> conceptsInQuestion) {
         
     }
 }

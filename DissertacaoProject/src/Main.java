@@ -1,4 +1,5 @@
 
+import Database.LocalDatabase;
 import Semantic.SemanticAnalysis;
 import NLP.NLPmodule;
 import QuestionsAnswers.AnswerTypeAnalysis;
@@ -31,6 +32,7 @@ public class Main {
         QuestionTypeAnalysis questionTypeAnalysis = new QuestionTypeAnalysis();
         AnswerTypeAnalysis answerTypeAnalysis = new AnswerTypeAnalysis();
         SemanticAnalysis semanticAnalysis = new SemanticAnalysis();
+        LocalDatabase localDatabase = new LocalDatabase();
 
         Question question = null;
 
@@ -42,7 +44,7 @@ public class Main {
                 BufferedReader input = new BufferedReader(new InputStreamReader(System.in, "utf-8"));
                 String userQuery = input.readLine();
 
-                question = new Question(nlpm, questionTypeAnalysis, answerTypeAnalysis, semanticAnalysis, userQuery);
+                question = new Question(nlpm, questionTypeAnalysis, answerTypeAnalysis, semanticAnalysis, localDatabase, userQuery);
 
 //                HashSet<ProcessedWord> lpw = nlpm.analyzeUserQuery(userQuery);
 //                Iterator<ProcessedWord> i = lpw.iterator();
