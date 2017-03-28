@@ -14,5 +14,5 @@ public enum QuestionTypes {
     WHEN, // quando
     WHERE, // onde
     WHICH, //qual
-    HOW; // quanto
+    HOW; // quanto // to do howmuch
 }

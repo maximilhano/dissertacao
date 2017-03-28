@@ -35,7 +35,6 @@ public class SemanticAnalysis {
     private final Language LANG = Language.PT;
     private final Language sLANG = Language.EN;
     private final BabelNet babelNet = BabelNet.getInstance();
-    private final BDpediaModule dbm = new BDpediaModule();
 
     /**
      * Recebe a lista de palavras processadas, adiciona synsets a cada uma e
@@ -67,6 +66,8 @@ public class SemanticAnalysis {
         switch (posTag) {
             case NOUN:
                 babelSynsets = babelNet.getSynsets(lemma, LANG, BabelPOS.NOUN, BabelSenseSource.WIKI);
+                if(babelSynsets.isEmpty())
+                    babelSynsets = babelNet.getSynsets(lemma, LANG, BabelPOS.NOUN, BabelSenseSource.WIKT);
                 break;
             case VERB:
                 babelSynsets = babelNet.getSynsets(lemma, LANG, BabelPOS.VERB, BabelSenseSource.OMWN);

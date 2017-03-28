@@ -14,10 +14,12 @@ import java.util.Iterator;
  *
  * @author Maksym
  */
+
+//TODO 
 public class QuestionTypeAnalysis {
 
     public QuestionTypes getQuestionType(HashSet<ProcessedWord> lpw){
-        Iterator<ProcessedWord> it = lpw.iterator();
+        Iterator<ProcessedWord> it = lpw.iterator(); // to do
         while (it.hasNext()) {
             ProcessedWord next = it.next();
             if(next.getPosTag() == BabelPOS.ADVERB){

@@ -16,7 +16,7 @@ import java.util.List;
 public class AnswerTypeAnalysis {
     private final HashMap<QuestionTypes,List<String>> answerTypes = 
             new HashMap<QuestionTypes,List<String>>(){{
-                put(QuestionTypes.WHO,Arrays.asList("dbo:Person", "dbo:Agent"));
+                put(QuestionTypes.WHO,Arrays.asList("dbo:Person", "dbo:Agent")); // definir de onde vem a lista
                 put(QuestionTypes.WHEN,Arrays.asList("xsd:date"));
                 put(QuestionTypes.WHERE,Arrays.asList("dbo:Place"));
                 put(QuestionTypes.WHICH,Arrays.asList("dbo:Person", "dbo:Place","xsd:date","xsd:time",

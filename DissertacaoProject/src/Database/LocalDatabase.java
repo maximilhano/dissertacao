@@ -10,6 +10,13 @@ import it.uniroma1.lcl.babelnet.BabelSynsetType;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.update.UpdateExecutionFactory;
+import org.apache.jena.update.UpdateFactory;
+import org.apache.jena.update.UpdateProcessor;
 
 /**
  *
@@ -34,34 +41,74 @@ public class LocalDatabase {
             + "PREFIX dbo: <http://dbpedia.org/ontology/>\n"
             + "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ";
     
-    private String selectQuery = PREFIX;
+    private final String selectQuery = PREFIX;
+    private final String updateQuery = PREFIX + "INSERT DATA { ";
 
-    
-    
-    private void getPredicates(String object){
+    public void getTriples(HashSet<String> entitiesInQuestion/*, HashSet<String> conceptsInQuestion*/) {
+        HashSet<String> properties = null;
         
+        Iterator<String> entitiesInQuestionIterator = entitiesInQuestion.iterator();
+        while (entitiesInQuestionIterator.hasNext()) {
+            String entity = entitiesInQuestionIterator.next();
+            String query = constructNamedEntitySelectQuery(entity);
+            ResultSet queryResult = runSelectQuery(query);
+            String upQuery = constructNamedEntityUpdateQuery(queryResult, entity);
+            runUpdateQuery(upQuery);
+        }
+        
+//        Iterator<String> conceptsInQuestionIterator = conceptsInQuestion.iterator();
+//        while (conceptsInQuestionIterator.hasNext()) {
+//            String concept = entitiesInQuestionIterator.next();
+//            String query = constructConceptSelectQuery(concept);
+//            ResultSet queryResult = runSelectQuery(query);
+//            if(queryResult != null){
+//                String upQuery = constructConceptUpdateQuery(queryResult, concept);
+//                runUpdateQuery(upQuery);
+//            }else{ // se resultados forem nulos, é uma propriedade
+//                properties.add(concept);
+//            }
+//        }
+//        return properties;
     }
     
-    private void getObject(){
-        
-    }
-    
-    private void constructNamedEntityQuery(String namedEntity){
-        selectQuery += "SELECT ?p ?o ?type WHERE "
+    private String constructNamedEntitySelectQuery(String namedEntity){
+       return "SELECT ?p ?o ?type WHERE "
                      + "{ :" + namedEntity + " ?p ?o ."
                      + "?p rdf:type ?ptype . "
                      + "?o rdf:type ?otype . }";
     }
     
-    private void runSelectQuery(String query){
+    private String constructNamedEntityUpdateQuery(ResultSet result, String entity){
+        QuerySolution soln;
+        String query = "";
+        while (result.hasNext()) {
+            soln = result.nextSolution();
+            query += " :" + entity + " <" + soln.get("p") + "> <" + soln.get("o") + "> . <" + soln.get("o") + "> rdf:type <" + soln.get("type") + "> .";
+        }
+        query += "}";
         
+        return query;
+    }
+    
+    private ResultSet runSelectQuery(String query){
+        QueryExecution qexec = QueryExecutionFactory.sparqlService(dbpediaEndpoint, PREFIX + query);
+        return qexec.execSelect();
     }
     
     private void runUpdateQuery(String query){
-        
+        UpdateProcessor upp = UpdateExecutionFactory.createRemote(UpdateFactory.create(updateQuery), fusekiUpdate);
+        upp.execute();
     }
 
-    public HashSet<String> getTriples(HashSet<String> entitiesInQuestion, HashSet<String> conceptsInQuestion) {
-        
-    }
+//    private String constructConceptSelectQuery(String concept) {
+//        return "SELECT * WHERE { " +
+//                " ?s ?p owl:Class ." +
+//                " FILTER regex(?s,\""+concept+"\",\"i\") }";
+//    }
+//
+//    private String constructConceptUpdateQuery(ResultSet queryResult, String concept) {
+//        
+//    }
+//
+//    
 }
