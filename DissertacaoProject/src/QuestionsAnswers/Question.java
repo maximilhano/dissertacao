@@ -32,8 +32,8 @@ public class Question {
 
     private final String userQuery;
     private HashSet<ProcessedWord> processedWordList;
-    private HashSet<String> entitiesInQuestion; // entidades nomeadas na pergunta
-    private HashSet<String> conceptsInQuestion; // conceitos na pergunta
+    private HashSet<String> entitiesInQuestion = new HashSet<>(); // entidades nomeadas na pergunta
+    private HashSet<String> conceptsInQuestion = new HashSet<>(); //  conceitos na pergunta
     private HashSet<String> propertiesInQuestion; // propriedades, são conceitos não reconhecidos.
 
     public Question(NLPmodule nlpm, QuestionTypeAnalysis questionTypeAnalysis, AnswerTypeAnalysis answerTypeAnalysis, SemanticAnalysis semanticAnalysis, LocalDatabase localDatabase, String userQuery) {
@@ -46,45 +46,45 @@ public class Question {
 
         // first, analise morfologica
         processedWordList = this.nlpm.analyzeUserQuery(this.userQuery); // lemma + POStag
-        System.out.println("\nProcessedWordList: " + processedWordList);
-        
+        System.out.println("\nProcessedWordList\n");
+ 
         Iterator<ProcessedWord> it = processedWordList.iterator();
         while (it.hasNext()) {
             ProcessedWord next = it.next();
-            System.out.println(next + "\n  lemma: " + next.getLemma() + "\n  POStag: " + next.getPosTag());
+            System.out.println(next.getLemma() + "\n  lemma: " + next.getLemma() + "\n  POStag: " + next.getPosTag());
         }
         
         // second question type
         questionType = this.questionTypeAnalysis.getQuestionType(processedWordList);
-        System.out.println("QuestionType: " + questionType);
+        System.out.println("\nQuestionType: " + questionType);
         
         //third, answer type
         answerType = this.answerTypeAnalysis.getAnswerType(questionType);
-        System.out.println("AnswerType: " + answerType);
-        
-        System.out.println("ProcessedWordList: " + processedWordList);
+        System.out.println("\nAnswerType: " + answerType);
         
         //fourth semantic analysis
         processedWordList = this.semanticAnalysis.setSemanticData(processedWordList); // list of synsets + type
-        System.out.println("\n\n After BabelNet \n\n");
+        System.out.println("\n\n After BabelNet");
         
         it = processedWordList.iterator();
         while (it.hasNext()) {
             ProcessedWord next = it.next();
-            System.out.println(next + "\n  lemma: " + next.getLemma() + 
+            System.out.println("\n\n  lemma: " + next.getLemma() + 
                     "\n  POStag: " + next.getPosTag() + 
-                    "\n  Synsets: \n");
+                    "\n  Synsets:");
             Map<String, BabelSynsetType> processedWordSynsets = next.getSynsets();
-            
-            for(Map.Entry<String, BabelSynsetType> entry : processedWordSynsets.entrySet() ){
-                String synset = entry.getKey();
-                BabelSynsetType synsetType = entry.getValue();
-                System.out.println(synset + " -> " + synsetType);
-            }
+            if(processedWordSynsets != null)
+                for(Map.Entry<String, BabelSynsetType> entry : processedWordSynsets.entrySet() ){
+                    String synset = entry.getKey();
+                    BabelSynsetType synsetType = entry.getValue();
+                    System.out.println(synset + " -> " + synsetType);
+                }
         }
         
         // fifth, focus entities
         setQuestionFocusEntities(); // lista de entidade
+        System.out.println("\n\n Question focus entities: " + entitiesInQuestion);
+        System.out.println("\n\n Question concepts: " + conceptsInQuestion);
         
         // sixth, 
         localDatabase.getTriples(entitiesInQuestion);
@@ -97,20 +97,25 @@ public class Question {
             ProcessedWord processedWord = it.next();
             
             Map<String, BabelSynsetType> processedWordSynsets = processedWord.getSynsets();
-            
-            for(Map.Entry<String, BabelSynsetType> entry : processedWordSynsets.entrySet() ){
-                String synset = entry.getKey();
-                BabelSynsetType synsetType = entry.getValue();
-                
-                switch(synsetType){
+            if(processedWordSynsets != null){
+                for (Map.Entry<String, BabelSynsetType> entry : processedWordSynsets.entrySet()) {
+                    String synset = entry.getKey();
+                    System.out.println("Synset antes: " + synset);
+                    synset = synset.replaceAll("[(),]", "");
+                    System.out.println("Synset depois: " + synset);
+                    BabelSynsetType synsetType = entry.getValue();
+
+                    switch (synsetType) {
                         case NAMED_ENTITY:
                             this.entitiesInQuestion.add(synset);
                             break;
                         case CONCEPT:
                             this.conceptsInQuestion.add(synset);
                             break;
+                    }
                 }
             }
+            
         }
     }
 }

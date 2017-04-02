@@ -14,6 +14,8 @@ import it.uniroma1.lcl.babelnet.data.BabelPointer;
 import it.uniroma1.lcl.babelnet.data.BabelSenseSource;
 import it.uniroma1.lcl.jlt.util.Language;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -49,43 +51,54 @@ public class SemanticAnalysis {
 
         while (it.hasNext()) {
             ProcessedWord next = it.next();
-            try {
-                next.setSynsets(getSynsets(next.getLemma(), next.getPosTag()));
-            } catch (IOException ex) {
-                Logger.getLogger(SemanticAnalysis.class.getName()).log(Level.SEVERE, null, ex);
+            if (next.getPosTag() != BabelPOS.ADVERB) {
+                try {
+                    next.setSynsets(getSynsets(next.getLemma(), next.getPosTag()));
+                } catch (IOException ex) {
+                    Logger.getLogger(SemanticAnalysis.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
 
         return processedWordList;
     }
 
-    private Map<String,BabelSynsetType> getSynsets(String lemma, BabelPOS posTag) throws IOException {
-        Map<String,BabelSynsetType> result = null;
+    private Map<String, BabelSynsetType> getSynsets(String lemma, BabelPOS posTag) throws IOException {
+        Map<String, BabelSynsetType> result = new HashMap<>();
         List<BabelSynset> babelSynsets = null;
 
         switch (posTag) {
             case NOUN:
                 babelSynsets = babelNet.getSynsets(lemma, LANG, BabelPOS.NOUN, BabelSenseSource.WIKI);
-                if(babelSynsets.isEmpty())
+                System.out.println(" 1 synsets size: " + babelSynsets.size());
+                if (babelSynsets.isEmpty()) {
                     babelSynsets = babelNet.getSynsets(lemma, LANG, BabelPOS.NOUN, BabelSenseSource.WIKT);
+                }
+                System.out.println(" 2 synsets size: " + babelSynsets.size());
                 break;
             case VERB:
                 babelSynsets = babelNet.getSynsets(lemma, LANG, BabelPOS.VERB, BabelSenseSource.OMWN);
-                babelSynsets.addAll(getEdges(babelSynsets, BabelPointer.DERIVATIONALLY_RELATED));
+                if(!babelSynsets.isEmpty())
+                    babelSynsets.addAll(getEdges(babelSynsets, BabelPointer.DERIVATIONALLY_RELATED));
+                    System.out.println("3 synsets size: " + babelSynsets.size());
+                break;
         }
-        
-        Iterator<BabelSynset> synsetIterator = babelSynsets.iterator();
-        
-        while (synsetIterator.hasNext()) {
-            BabelSynset babelSynset = synsetIterator.next();
-            result.put(babelSynset.getMainSense(sLANG).getLemma(),babelSynset.getSynsetType());
+
+        if (babelSynsets != null) {
+            Iterator<BabelSynset> synsetIterator = babelSynsets.iterator();
+
+            while (synsetIterator.hasNext()) {
+                BabelSynset babelSynset = synsetIterator.next();
+                result.put(babelSynset.getMainSense(sLANG).getLemma(), babelSynset.getSynsetType());
+            }
         }
+
         return result;
     }
 
     public List<BabelSynset> getEdges(List<BabelSynset> synsets, BabelPointer pointer) {
 
-        List<BabelSynset> edges = null;
+        List<BabelSynset> edges = new ArrayList<>();
 
         Iterator<BabelSynset> synsetIterator = synsets.iterator();
         while (synsetIterator.hasNext()) {
@@ -128,5 +141,5 @@ public class SemanticAnalysis {
 //                fl.saveExpandedSynsets(next);
 //                synsetIterator.BabelSynset(synsets);
 //            }
-        //}
+//}
         //setSemanticData(processedWordList);

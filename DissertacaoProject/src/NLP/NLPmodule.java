@@ -134,20 +134,20 @@ public class NLPmodule {
         while (sIt.hasNext()) {
             Sentence s = sIt.next();
             
-            this.printDepTree(0, this.getDepTree(s));
-            this.printParseTree(0, this.getParseTree(s));
+            //this.printDepTree(0, this.getDepTree(s));
+            //this.printParseTree(0, this.getParseTree(s));
             
             ListWordIterator wIt = new ListWordIterator(s);
             while (wIt.hasNext()) {
                 Word w = wIt.next();
                 if(w.getLemma().length() > 2){ //to do use stopwords https://gist.github.com/alopes/5358189
-                    System.out.println("LEMMA: " + w.getLemma());
-                    System.out.println("TAG: " + w.getTag());
-                    System.out.println(" w.getForm(): " + w.getForm());
-                    System.out.println(" w.getLcForm(): " + w.getLcForm());
-                    System.out.println(" w.getPhForm(): " + w.getPhForm());
-                    System.out.println(" w.getNWordsMw(): " + w.getNWordsMw());
-                    System.out.println(" w.getSenses(): " + w.getSenses());
+//                    System.out.println("LEMMA: " + w.getLemma());
+//                    System.out.println("TAG: " + w.getTag());
+//                    System.out.println(" w.getForm(): " + w.getForm());
+//                    System.out.println(" w.getLcForm(): " + w.getLcForm());
+//                    System.out.println(" w.getPhForm(): " + w.getPhForm());
+//                    System.out.println(" w.getNWordsMw(): " + w.getNWordsMw());
+//                    System.out.println(" w.getSenses(): " + w.getSenses());
                     processedWords.add(new ProcessedWord(w.getLemma(), this.posIdentifier(w.getTag())));
                 }
             }
