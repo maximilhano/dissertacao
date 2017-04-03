@@ -7,6 +7,7 @@ package QuestionsAnswers;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -14,19 +15,19 @@ import java.util.List;
  * @author Maksym
  */
 public class AnswerTypeAnalysis {
-    private final HashMap<QuestionTypes,List<String>> answerTypes = 
-            new HashMap<QuestionTypes,List<String>>(){{
-                put(QuestionTypes.WHO,Arrays.asList("dbo:Person", "dbo:Agent")); // definir de onde vem a lista
-                put(QuestionTypes.WHEN,Arrays.asList("xsd:date"));
-                put(QuestionTypes.WHERE,Arrays.asList("dbo:Place"));
-                put(QuestionTypes.WHICH,Arrays.asList("dbo:Person", "dbo:Place","xsd:date","xsd:time",
-                                                       "owl:Thing","dbo:Game","dbo:Eukaryote","dbc:Dog_breeds"));
-                put(QuestionTypes.HOW,Arrays.asList("xsd:integer", "xsd:float", "xsd:long","xsd:double",
+    private final HashMap<QuestionTypes,HashSet<String>> answerTypes = 
+            new HashMap<QuestionTypes,HashSet<String>>(){{
+                put(QuestionTypes.WHO,new HashSet<>(Arrays.asList("dbo:Person", "dbo:Agent"))); // definir de onde vem a lista
+                put(QuestionTypes.WHEN,new HashSet<>(Arrays.asList("xsd:date")));
+                put(QuestionTypes.WHERE,new HashSet<>(Arrays.asList("dbo:Place")));
+                put(QuestionTypes.WHICH,new HashSet<>(Arrays.asList("dbo:Person", "dbo:Place","xsd:date","xsd:time",
+                                                       "owl:Thing","dbo:Game","dbo:Eukaryote","dbc:Dog_breeds")));
+                put(QuestionTypes.HOW,new HashSet<>(Arrays.asList("xsd:integer", "xsd:float", "xsd:long","xsd:double",
                                                     "xsd:duration","xsd:positiveInteger","xsd:negativeInteger",
-                                                    "xsd:unsignedInt","xsd:unsignedLong","xsd:unsignedShort"));
+                                                    "xsd:unsignedInt","xsd:unsignedLong","xsd:unsignedShort")));
             }};
     
-    public List<String> getAnswerType(QuestionTypes questionType){
+    public HashSet<String> getAnswerType(QuestionTypes questionType){
         return answerTypes.get(questionType);
     }
 }

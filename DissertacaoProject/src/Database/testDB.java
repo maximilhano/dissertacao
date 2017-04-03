@@ -14,7 +14,7 @@ import java.util.HashSet;
 public class testDB {
     public static void main(String[] args) {
         HashSet<String> a = new HashSet<>();
-        a.add("Mediterranean_Sea");
+        a.add("Albert_Einstein");
         LocalDatabase l = new LocalDatabase();
         l.getTriples(a);
     }

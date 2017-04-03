@@ -5,6 +5,7 @@
  */
 package Database;
 
+import NLP.DetectSpecialCharacter;
 import java.util.HashSet;
 import java.util.Iterator;
 import org.apache.jena.query.QueryExecution;
@@ -26,6 +27,7 @@ public class LocalDatabase {
     private final String dbpediaEndpoint = "http://dbpedia.org/sparql/";
     private final String fusekiQuery = DB + "query";
     private final String fusekiUpdate = DB + "update";
+    private final DetectSpecialCharacter specialCharacter = new DetectSpecialCharacter();
 
     private final String PREFIX = "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"
             + "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n"
@@ -48,7 +50,11 @@ public class LocalDatabase {
             String query = constructNamedEntitySelectQuery(entity);
             ResultSet queryResult = runSelectQuery(query);
             String upQuery = constructNamedEntityUpdateQuery(queryResult, entity);
-            runUpdateQuery(upQuery);
+            if (!upQuery.isEmpty()) {
+                //System.out.println(upQuery);
+                //runUpdateQuery(upQuery); 
+            }
+
         }
     }
 
@@ -61,8 +67,10 @@ public class LocalDatabase {
 
     private String constructNamedEntityUpdateQuery(ResultSet result, String entity) {
         QuerySolution soln;
-        String query = updateQuery;
+        String query = "";
+
         while (result.hasNext()) {
+            query = "";
             soln = result.nextSolution();
 
             RDFNode predicate = soln.get("p");
@@ -71,36 +79,56 @@ public class LocalDatabase {
             RDFNode objectType = soln.get("otype");
 
             if (predicate != null && object != null) {
+
                 if (object.isLiteral()) {
                     String[] split = null;
+
                     if (object.toString().contains("@")) {
+
                         split = object.toString().split("@");
-                        query += " :" + entity + " <" + predicate + "> \"" + split[0] + "\"@" + split[1] + " .";
-                        System.out.println(" :" + entity + " <" + predicate + "> \"" + split[0] + "\"@" + split[1] + " .");
+                        if (!specialCharacter.hasSpecialCharacter(split[0])) {
+                            query += " :" + entity + " <" + predicate + "> \"" + split[0] + "\"@" + split[1] + " .\n";
+                            //System.out.println("SPLIT 0: " + split[0]);
+                            //System.err.println("SPLIT 1: " + split[1]);
+                        }
+
                     } else if (object.toString().contains("^^")) {
+
                         split = object.toString().split("http://www.w3.org/2001/XMLSchema#");
-                        
+
                         if (split.length > 1) {
                             split[0] = split[0].replace("^", "");
-                            query += " :" + entity + " <" + predicate + "> \"" + split[0] + "\"^^xsd:" + split[1] + " .";
-                            System.out.println(" :" + entity + " <" + predicate + "> \"" + split[0] + "\"^^xsd:" + split[1] + " .");
+                            if (!specialCharacter.hasSpecialCharacter(split[0])) {
+                                query += " :" + entity + " <" + predicate + "> \"" + split[0] + "\"^^xsd:" + split[1] + " .\n";
+                                //System.out.println("SPLIT 0: " + split[0]);
+                                //System.err.println("SPLIT 1: " + split[1]);
+                            }
+                        }
+
+                    } else {
+                        if (!specialCharacter.hasSpecialCharacter(object.toString())) {
+                            query += " :" + entity + " <" + predicate + "> \"" + object + "\" .\n";
+                            //System.out.println("OBJECT: " + object.toString());
                         }
                     }
-                } else {
-                    //query += " :" + entity + " <" + predicate + "> <" + object + "> .";
+
+                } else if (object.isResource()) {
+                    query += " :" + entity + " <" + predicate + "> <" + object + "> .\n";
+
+                    if (predicateType != null) {
+                        query += " <" + predicate + "> rdf:type <" + predicateType + "> .\n";
+                    }
+
+                    if (objectType != null) {
+                        query += " <" + object + "> rdf:type <" + objectType + "> .\n";
+                    }
+
                 }
             }
-
-            //System.out.println("UPDATE QUERY: " + query);
-//            if (predicateType != null) {
-//                query += " <" + predicate + "> rdf:type <" + predicateType + "> .";
-//            }
-//
-//            if (objectType != null) {
-//                query += " <" + object + "> rdf:type <" + objectType + "> .";
-//            }
+            if (!query.isEmpty()) {
+                runUpdateQuery(query);
+            }
         }
-        query += " }";
 
         return query;
     }
@@ -113,8 +141,51 @@ public class LocalDatabase {
     }
 
     private void runUpdateQuery(String query) {
-        UpdateProcessor upp = UpdateExecutionFactory.createRemote(UpdateFactory.create(query), fusekiUpdate);
+        System.err.println("\n\n UPDATE QUERY: " + query + " \n\n");
+        UpdateProcessor upp = UpdateExecutionFactory.createRemote(UpdateFactory.create(updateQuery + query + " }"), fusekiUpdate);
         upp.execute();
+    }
+
+    public HashSet<String> getPossibleProperties(String namedEntity, HashSet<String> concepts) {
+        HashSet<String> res = new HashSet<>();
+        Iterator<String> it = concepts.iterator();
+        while (it.hasNext()) {
+            String next = it.next();
+            String query = "SELECT ?p WHERE "
+                    + "{ :" + namedEntity + " ?p ?o . "
+                    + "FILTER regex(str(?p),\"" + next + "\",\"i\")}";
+            ResultSet queryResult = runFusekiSelectQuery(query);
+
+            while (queryResult.hasNext()) {
+                QuerySolution next1 = queryResult.next();
+                res.add(next1.get("p").toString());
+            }
+        }
+        return res;
+    }
+
+    private ResultSet runFusekiSelectQuery(String query) {
+        QueryExecution qexec = QueryExecutionFactory.sparqlService(fusekiQuery, PREFIX + query);
+        return qexec.execSelect();
+    }
+
+    public HashSet<String> getPossibleClasses(String namedEntity, HashSet<String> concepts) {
+        HashSet<String> res = new HashSet<>();
+        Iterator<String> it = concepts.iterator();
+        while (it.hasNext()) {
+            String next = it.next();
+            String query = "SELECT ?o WHERE "
+                    + "{ :" + namedEntity + " ?p ?o . "
+                    + " ?o rdf:type ?otype"
+                    + "FILTER regex(str(?otype),\"" + next + "\",\"i\")}";
+            ResultSet queryResult = runFusekiSelectQuery(query);
+
+            while (queryResult.hasNext()) {
+                QuerySolution next1 = queryResult.next();
+                res.add(next1.get("o").toString());
+            }
+        }
+        return res;
     }
 
     private void printQueryResult(ResultSet result) {

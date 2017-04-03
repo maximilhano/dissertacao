@@ -28,7 +28,7 @@ public class Question {
     private final LocalDatabase localDatabase;
 
     private final QuestionTypes questionType;
-    private final List<String> answerType;
+    private final HashSet<String> answerType;
 
     private final String userQuery;
     private HashSet<ProcessedWord> processedWordList;
@@ -36,6 +36,9 @@ public class Question {
     private HashSet<String> conceptsInQuestion = new HashSet<>(); //  conceitos na pergunta
     private HashSet<String> propertiesInQuestion; // propriedades, são conceitos não reconhecidos.
 
+    private String questionDBpediaQuery = "";
+    private String questionLocalQuery = "";
+    
     public Question(NLPmodule nlpm, QuestionTypeAnalysis questionTypeAnalysis, AnswerTypeAnalysis answerTypeAnalysis, SemanticAnalysis semanticAnalysis, LocalDatabase localDatabase, String userQuery) {
         this.nlpm = nlpm;
         this.questionTypeAnalysis = questionTypeAnalysis;
@@ -88,7 +91,6 @@ public class Question {
         
         // sixth, 
         localDatabase.getTriples(entitiesInQuestion);
-        
     }
     
     private void setQuestionFocusEntities(){
@@ -118,4 +120,15 @@ public class Question {
             
         }
     }
+    
+    private void addNamedEntityToQuery(String namedEntity){
+        questionLocalQuery+=" :" + namedEntity + " ?p ?o . ";
+    }
+    
+    private void addAnswerTypeToQuery(){
+        String filter = "FILTER (";
+        
+        questionLocalQuery += " ";
+    }
+    
 }
