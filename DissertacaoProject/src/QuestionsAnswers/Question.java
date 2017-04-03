@@ -39,6 +39,9 @@ public class Question {
     private String questionDBpediaQuery = "";
     private String questionLocalQuery = "";
     
+    private HashSet<String> possiblePredicates;
+    private HashSet<String> possibleClasses;
+    
     public Question(NLPmodule nlpm, QuestionTypeAnalysis questionTypeAnalysis, AnswerTypeAnalysis answerTypeAnalysis, SemanticAnalysis semanticAnalysis, LocalDatabase localDatabase, String userQuery) {
         this.nlpm = nlpm;
         this.questionTypeAnalysis = questionTypeAnalysis;
@@ -91,6 +94,16 @@ public class Question {
         
         // sixth, 
         localDatabase.getTriples(entitiesInQuestion);
+        
+        Iterator<String> entities = entitiesInQuestion.iterator();
+        while (entities.hasNext()) {
+            String entity = entities.next();
+            addNamedEntityToQuery(entity);
+            addAnswerTypeToQuery();
+            addPropertyToQuery();
+        }
+        
+        possiblePredicates = localDatabase.getPossibleProperties(userQuery, answerType)
     }
     
     private void setQuestionFocusEntities(){
@@ -128,7 +141,31 @@ public class Question {
     private void addAnswerTypeToQuery(){
         String filter = "FILTER (";
         
-        questionLocalQuery += " ";
+        Iterator<String> it = answerType.iterator();
+        while (it.hasNext()) {
+            String next = it.next();
+            filter+= "?o = " + next;
+            if(it.hasNext())
+                filter+=" || ";
+         }
+        filter+=")";
+        
+        questionLocalQuery += filter;
+    }
+    
+    private void addPropertyToQuery(){
+        String filter = "FILTER (";
+        
+        Iterator<String> it = .iterator();
+        while (it.hasNext()) {
+            String next = it.next();
+            filter+= "?o = " + next;
+            if(it.hasNext())
+                filter+=" || ";
+         }
+        filter+=")";
+        
+        questionLocalQuery += filter;
     }
     
 }
