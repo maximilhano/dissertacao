@@ -61,7 +61,7 @@ public class LocalDatabase {
     private String constructNamedEntitySelectQuery(String namedEntity) {
         return "SELECT * WHERE "
                 + "{ :" + namedEntity + " ?p ?o ."
-                + "OPTIONAL { ?p rdf:type ?ptype }"
+                //+ "OPTIONAL { ?p rdf:type ?ptype }"
                 + "OPTIONAL { ?o rdf:type ?otype }}";
     }
 
@@ -75,7 +75,7 @@ public class LocalDatabase {
 
             RDFNode predicate = soln.get("p");
             RDFNode object = soln.get("o");
-            RDFNode predicateType = soln.get("ptype");
+            //RDFNode predicateType = soln.get("ptype");
             RDFNode objectType = soln.get("otype");
 
             if (predicate != null && object != null) {
@@ -115,9 +115,9 @@ public class LocalDatabase {
                 } else if (object.isResource()) {
                     query += " :" + entity + " <" + predicate + "> <" + object + "> .\n";
 
-                    if (predicateType != null) {
-                        query += " <" + predicate + "> rdf:type <" + predicateType + "> .\n";
-                    }
+//                    if (predicateType != null) {
+//                        query += " <" + predicate + "> rdf:type <" + predicateType + "> .\n";
+//                    }
 
                     if (objectType != null) {
                         query += " <" + object + "> rdf:type <" + objectType + "> .\n";
@@ -141,12 +141,14 @@ public class LocalDatabase {
     }
 
     private void runUpdateQuery(String query) {
-        System.err.println("\n\n UPDATE QUERY: " + query + " \n\n");
+        //System.err.println("runUpdateQuery");
+        //System.err.println("\n\n UPDATE QUERY: " + query + " \n\n");
         UpdateProcessor upp = UpdateExecutionFactory.createRemote(UpdateFactory.create(updateQuery + query + " }"), fusekiUpdate);
         upp.execute();
     }
 
     public HashSet<String> getPossibleProperties(String namedEntity, HashSet<String> concepts) {
+        //System.err.println("getPossibleProperties");
         HashSet<String> res = new HashSet<>();
         Iterator<String> it = concepts.iterator();
         while (it.hasNext()) {
@@ -154,6 +156,9 @@ public class LocalDatabase {
             String query = "SELECT ?p WHERE "
                     + "{ :" + namedEntity + " ?p ?o . "
                     + "FILTER regex(str(?p),\"" + next + "\",\"i\")}";
+            
+            System.err.println("getPossibleProperties: \n Query: " + query);
+            
             ResultSet queryResult = runFusekiSelectQuery(query);
 
             while (queryResult.hasNext()) {
@@ -161,12 +166,15 @@ public class LocalDatabase {
                 res.add(next1.get("p").toString());
             }
         }
+        System.out.println("RES: " + res);
         return res;
     }
 
     private ResultSet runFusekiSelectQuery(String query) {
+        //System.err.println("runFusekiSelectQuery");
         QueryExecution qexec = QueryExecutionFactory.sparqlService(fusekiQuery, PREFIX + query);
-        return qexec.execSelect();
+        ResultSet result = qexec.execSelect();
+        return result;
     }
 
     public HashSet<String> getPossibleClasses(String namedEntity, HashSet<String> concepts) {

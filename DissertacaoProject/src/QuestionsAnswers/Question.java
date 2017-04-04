@@ -38,10 +38,10 @@ public class Question {
 
     private String questionDBpediaQuery = "";
     private String questionLocalQuery = "";
-    
-    private HashSet<String> possiblePredicates;
-    private HashSet<String> possibleClasses;
-    
+
+    private HashSet<String> possiblePredicates = new HashSet<>();
+    private HashSet<String> possibleClasses = new HashSet<>();
+
     public Question(NLPmodule nlpm, QuestionTypeAnalysis questionTypeAnalysis, AnswerTypeAnalysis answerTypeAnalysis, SemanticAnalysis semanticAnalysis, LocalDatabase localDatabase, String userQuery) {
         this.nlpm = nlpm;
         this.questionTypeAnalysis = questionTypeAnalysis;
@@ -53,66 +53,77 @@ public class Question {
         // first, analise morfologica
         processedWordList = this.nlpm.analyzeUserQuery(this.userQuery); // lemma + POStag
         System.out.println("\nProcessedWordList\n");
- 
+
         Iterator<ProcessedWord> it = processedWordList.iterator();
         while (it.hasNext()) {
             ProcessedWord next = it.next();
             System.out.println(next.getLemma() + "\n  lemma: " + next.getLemma() + "\n  POStag: " + next.getPosTag());
         }
-        
+
         // second question type
         questionType = this.questionTypeAnalysis.getQuestionType(processedWordList);
         System.out.println("\nQuestionType: " + questionType);
-        
+
         //third, answer type
         answerType = this.answerTypeAnalysis.getAnswerType(questionType);
         System.out.println("\nAnswerType: " + answerType);
-        
+
         //fourth semantic analysis
         processedWordList = this.semanticAnalysis.setSemanticData(processedWordList); // list of synsets + type
         System.out.println("\n\n After BabelNet");
-        
+
         it = processedWordList.iterator();
         while (it.hasNext()) {
             ProcessedWord next = it.next();
-            System.out.println("\n\n  lemma: " + next.getLemma() + 
-                    "\n  POStag: " + next.getPosTag() + 
-                    "\n  Synsets:");
+            System.out.println("\n\n  lemma: " + next.getLemma()
+                    + "\n  POStag: " + next.getPosTag()
+                    + "\n  Synsets:");
             Map<String, BabelSynsetType> processedWordSynsets = next.getSynsets();
-            if(processedWordSynsets != null)
-                for(Map.Entry<String, BabelSynsetType> entry : processedWordSynsets.entrySet() ){
+            if (processedWordSynsets != null) {
+                for (Map.Entry<String, BabelSynsetType> entry : processedWordSynsets.entrySet()) {
                     String synset = entry.getKey();
                     BabelSynsetType synsetType = entry.getValue();
                     System.out.println(synset + " -> " + synsetType);
                 }
+            }
         }
-        
+
         // fifth, focus entities
         setQuestionFocusEntities(); // lista de entidade
         System.out.println("\n\n Question focus entities: " + entitiesInQuestion);
         System.out.println("\n\n Question concepts: " + conceptsInQuestion);
-        
+
         // sixth, 
         localDatabase.getTriples(entitiesInQuestion);
-        
+
         Iterator<String> entities = entitiesInQuestion.iterator();
         while (entities.hasNext()) {
             String entity = entities.next();
             addNamedEntityToQuery(entity);
             addAnswerTypeToQuery();
-            addPropertyToQuery();
+            
+            HashSet<String> aux = localDatabase.getPossibleProperties(entity, conceptsInQuestion);
+            if(!aux.isEmpty())
+                possiblePredicates.addAll(aux);
+                System.out.println("POSSIBLE PREDICATES: " + possiblePredicates);
+            
+            if(!possiblePredicates.isEmpty())
+                addPropertyToQuery();
+            
+            System.out.println("FINAL QUERY: " + "SELECT * WHERE {" + questionLocalQuery + "}");
+            questionLocalQuery = "";
+            possiblePredicates.clear();
         }
-        
-        possiblePredicates = localDatabase.getPossibleProperties(userQuery, answerType)
+
     }
-    
-    private void setQuestionFocusEntities(){
+
+    private void setQuestionFocusEntities() {
         Iterator<ProcessedWord> it = processedWordList.iterator();
         while (it.hasNext()) {
             ProcessedWord processedWord = it.next();
-            
+
             Map<String, BabelSynsetType> processedWordSynsets = processedWord.getSynsets();
-            if(processedWordSynsets != null){
+            if (processedWordSynsets != null) {
                 for (Map.Entry<String, BabelSynsetType> entry : processedWordSynsets.entrySet()) {
                     String synset = entry.getKey();
                     System.out.println("Synset antes: " + synset);
@@ -130,42 +141,81 @@ public class Question {
                     }
                 }
             }
-            
+
         }
     }
-    
-    private void addNamedEntityToQuery(String namedEntity){
-        questionLocalQuery+=" :" + namedEntity + " ?p ?o . ";
+
+    private void addNamedEntityToQuery(String namedEntity) {
+        System.err.println("addNamedEntityToQuery: \n Query: " + questionLocalQuery);
+        questionLocalQuery += " :" + namedEntity + " ?p ?o .\n";
     }
-    
-    private void addAnswerTypeToQuery(){
-        String filter = "FILTER (";
-        
+
+    private void addAnswerTypeToQuery() {
+
+        String filter = "";
         Iterator<String> it = answerType.iterator();
-        while (it.hasNext()) {
-            String next = it.next();
-            filter+= "?o = " + next;
-            if(it.hasNext())
-                filter+=" || ";
-         }
-        filter+=")";
+
+        switch (questionType) {
+            case WHEN:
+                filter += "FILTER (";
+                
+                while (it.hasNext()) {
+                    String next = it.next();
+                    filter += "datatype(?o) = " + next;
+                    if (it.hasNext()) {
+                        filter += " || ";
+                    }
+                }
+                filter += ").\n";
+                
+                break;
+            case HOW:
+                filter += "FILTER (";
+                
+                while (it.hasNext()) {
+                    String next = it.next();
+                    filter += "datatype(?o) = " + next;
+                    if (it.hasNext()) {
+                        filter += " || ";
+                    }
+                }
+                filter += ").\n";
+                
+                break;
+            default:
+                filter += "?o rdf:type ?otype .\n FILTER (";
+
+                while (it.hasNext()) {
+                    String next = it.next();
+                    filter += "?otype = " + next;
+                    if (it.hasNext()) {
+                        filter += " || ";
+                    }
+                }
+                filter += ").\n";
+
+                break;
+        }
         
         questionLocalQuery += filter;
+        System.out.println("addAnswerTypeToQuery: \n Query: " + questionLocalQuery);
     }
-    
-    private void addPropertyToQuery(){
+
+    private void addPropertyToQuery() {
         String filter = "FILTER (";
-        
-        Iterator<String> it = .iterator();
+
+        Iterator<String> it = possiblePredicates.iterator();
         while (it.hasNext()) {
             String next = it.next();
-            filter+= "?o = " + next;
-            if(it.hasNext())
-                filter+=" || ";
-         }
-        filter+=")";
-        
+            filter += "?p = <" + next + ">";
+            if (it.hasNext()) {
+                filter += " || ";
+            }
+        }
+        filter += ").\n";
+
         questionLocalQuery += filter;
+        System.out.println("addPropertyToQuery: \n Query: " + questionLocalQuery);
     }
-    
+
 }
