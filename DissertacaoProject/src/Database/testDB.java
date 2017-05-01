@@ -14,8 +14,15 @@ import java.util.HashSet;
 public class testDB {
     public static void main(String[] args) {
         HashSet<String> a = new HashSet<>();
-        a.add("Albert_Einstein");
+        a.add("be_born");
+        a.add("birth");
+        a.add("nativity");
         LocalDatabase l = new LocalDatabase();
-        l.getTriples(a);
+        //l.getTriples(a);
+        int i= 0;
+        while (i<10) {            
+            System.out.print(l.getPossibleProperties("Will_Smith", a));
+            i++;
+        }
     }
 }

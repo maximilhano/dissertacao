@@ -1,0 +1,651 @@
+
+
+-------------------------------------------------------------------------------------------------
+	 Nova pergunta 
+
+  Pergunta: Quem é o Secretário Geral da ONU?
+  Tipo de pergunta: WHO
+  Tipo de resposta: 
+  - dbo:Agent
+  - dbo:Person
+
+	Resultado de análise morfologica e BabelNet:
+
+  lemma: ser
+  POS: VERB
+  synsets: 
+  -s- exist -t- Concept
+  -s- debut -t- Concept
+  -s- actual -t- Concept
+  -s- existing -t- Concept
+  -s- be -t- Concept
+  -s- existence -t- Concept
+  -s- existent -t- Concept
+ ----- 
+
+  lemma: secretário_geral_de_a_onu
+  POS: NOUN
+ ----- 
+
+
+	Conceitos na pergunta 
+
+  - exist
+  - debut
+  - actual
+  - existing
+  - be
+  - existence
+  - existent
+
+-------------------------------------------------------------------------------------------------
+	 Nova pergunta 
+
+  Pergunta: O que é um Camelo?
+  Tipo de pergunta: null
+  Tipo de resposta: 
+
+	Resultado de análise morfologica e BabelNet:
+
+  lemma: ser
+  POS: VERB
+  synsets: 
+  -s- exist -t- Concept
+  -s- debut -t- Concept
+  -s- actual -t- Concept
+  -s- existing -t- Concept
+  -s- be -t- Concept
+  -s- existence -t- Concept
+  -s- existent -t- Concept
+ ----- 
+
+  lemma: camelo
+  POS: NOUN
+  synsets: 
+  -s- camel -t- Concept
+ ----- 
+
+
+	Conceitos na pergunta 
+
+  - exist
+  - debut
+  - actual
+  - existing
+  - be
+  - camel
+  - existence
+  - existent
+
+-------------------------------------------------------------------------------------------------
+	 Nova pergunta 
+
+  Pergunta: Quantas variedades de camelos existem?
+  Tipo de pergunta: HOW
+  Tipo de resposta: 
+  - xsd:duration
+  - xsd:unsignedInt
+  - xsd:double
+  - xsd:unsignedShort
+  - xsd:negativeInteger
+  - xsd:float
+  - xsd:integer
+  - xsd:positiveInteger
+  - xsd:long
+  - xsd:unsignedLong
+
+	Resultado de análise morfologica e BabelNet:
+
+  lemma: variedade
+  POS: NOUN
+  synsets: 
+  -s- variety -t- Concept
+  -s- variety_(universal_algebra) -t- Concept
+  -s- Variety_(radio) -t- Concept
+  -s- variety_(linguistics) -t- Concept
+  -s- variety_(cybernetics) -t- Concept
+ ----- 
+
+  lemma: camelo
+  POS: NOUN
+  synsets: 
+  -s- camel -t- Concept
+ ----- 
+
+  lemma: existir
+  POS: VERB
+  synsets: 
+  -s- exist -t- Concept
+  -s- actual -t- Concept
+  -s- existing -t- Concept
+  -s- existence -t- Concept
+  -s- lie -t- Concept
+  -s- existent -t- Concept
+  -s- consist -t- Concept
+ ----- 
+
+
+	Conceitos na pergunta 
+
+  - actual
+  - variety_(universal_algebra)
+  - existence
+  - lie
+  - variety_(linguistics)
+  - variety_(cybernetics)
+  - existent
+  - consist
+  - exist
+  - existing
+  - variety
+  - camel
+  - Variety_(radio)
+
+-------------------------------------------------------------------------------------------------
+	 Nova pergunta 
+
+  Pergunta: Qual é a velocidade maxíma da luz?
+  Tipo de pergunta: WHICH
+  Tipo de resposta: 
+  - xsd:date
+  - dbc:Dog_breeds
+  - dbo:Eukaryote
+  - xsd:double
+  - xsd:float
+  - dbo:Person
+  - dbo:Place
+  - xsd:time
+  - xsd:integer
+  - dbo:Game
+  - xsd:long
+
+	Resultado de análise morfologica e BabelNet:
+
+  lemma: ser
+  POS: VERB
+  synsets: 
+  -s- exist -t- Concept
+  -s- debut -t- Concept
+  -s- actual -t- Concept
+  -s- existing -t- Concept
+  -s- be -t- Concept
+  -s- existence -t- Concept
+  -s- existent -t- Concept
+ ----- 
+
+  lemma: velocidade
+  POS: NOUN
+  synsets: 
+  -s- Design_speed -t- Concept
+  -s- amphetamine -t- Concept
+  -s- velocity -t- Concept
+  -s- airspeed -t- Concept
+  -s- speed -t- Concept
+ ----- 
+
+  lemma: luz
+  POS: NOUN
+  synsets: 
+  -s- light -t- Concept
+  -s- Divine_light -t- Concept
+  -s- Lightbox -t- Concept
+ ----- 
+
+  lemma: maxíma
+  POS: ADJECTIVE
+ ----- 
+
+
+	Conceitos na pergunta 
+
+  - actual
+  - be
+  - Design_speed
+  - existence
+  - amphetamine
+  - velocity
+  - airspeed
+  - existent
+  - speed
+  - Lightbox
+  - exist
+  - debut
+  - existing
+  - light
+  - Divine_light
+
+-------------------------------------------------------------------------------------------------
+	 Nova pergunta 
+
+  Pergunta: Qual é a velocidade maxíma da luz?
+  Tipo de pergunta: WHICH
+  Tipo de resposta: 
+  - xsd:date
+  - dbc:Dog_breeds
+  - dbo:Eukaryote
+  - xsd:double
+  - xsd:float
+  - dbo:Person
+  - dbo:Place
+  - xsd:time
+  - xsd:integer
+  - dbo:Game
+  - xsd:long
+
+	Resultado de análise morfologica e BabelNet:
+
+  lemma: luz
+  POS: NOUN
+  synsets: 
+  -s- light -t- Concept
+  -s- Divine_light -t- Concept
+  -s- Lightbox -t- Concept
+ ----- 
+
+  lemma: ser
+  POS: VERB
+  synsets: 
+  -s- exist -t- Concept
+  -s- debut -t- Concept
+  -s- actual -t- Concept
+  -s- existing -t- Concept
+  -s- be -t- Concept
+  -s- existence -t- Concept
+  -s- existent -t- Concept
+ ----- 
+
+  lemma: velocidade
+  POS: NOUN
+  synsets: 
+  -s- Design_speed -t- Concept
+  -s- amphetamine -t- Concept
+  -s- velocity -t- Concept
+  -s- airspeed -t- Concept
+  -s- speed -t- Concept
+ ----- 
+
+  lemma: maxíma
+  POS: ADJECTIVE
+ ----- 
+
+
+	Conceitos na pergunta 
+
+  - actual
+  - be
+  - Design_speed
+  - existence
+  - amphetamine
+  - velocity
+  - airspeed
+  - existent
+  - speed
+  - Lightbox
+  - exist
+  - debut
+  - existing
+  - light
+  - Divine_light
+
+-------------------------------------------------------------------------------------------------
+	 Nova pergunta 
+
+  Pergunta: Qual é a velocidade maxíma da luz?
+  Tipo de pergunta: WHICH
+  Tipo de resposta: 
+  - xsd:date
+  - dbc:Dog_breeds
+  - dbo:Eukaryote
+  - xsd:double
+  - xsd:float
+  - dbo:Person
+  - dbo:Place
+  - xsd:time
+  - xsd:integer
+  - dbo:Game
+  - xsd:long
+
+	Resultado de análise morfologica e BabelNet:
+
+  lemma: luz
+  POS: NOUN
+  synsets: 
+  -s- light -t- Concept
+  -s- Divine_light -t- Concept
+  -s- Lightbox -t- Concept
+ ----- 
+
+  lemma: ser
+  POS: VERB
+  synsets: 
+  -s- exist -t- Concept
+  -s- debut -t- Concept
+  -s- actual -t- Concept
+  -s- existing -t- Concept
+  -s- be -t- Concept
+  -s- existence -t- Concept
+  -s- existent -t- Concept
+ ----- 
+
+  lemma: velocidade
+  POS: NOUN
+  synsets: 
+  -s- Design_speed -t- Concept
+  -s- amphetamine -t- Concept
+  -s- velocity -t- Concept
+  -s- airspeed -t- Concept
+  -s- speed -t- Concept
+ ----- 
+
+  lemma: maxíma
+  POS: ADJECTIVE
+ ----- 
+
+
+	Conceitos na pergunta 
+
+  - actual
+  - be
+  - Design_speed
+  - existence
+  - amphetamine
+  - velocity
+  - airspeed
+  - existent
+  - speed
+  - Lightbox
+  - exist
+  - debut
+  - existing
+  - light
+  - Divine_light
+
+-------------------------------------------------------------------------------------------------
+	 Nova pergunta 
+
+  Pergunta: Qual é a velocidade máxima da luz?
+  Tipo de pergunta: WHICH
+  Tipo de resposta: 
+  - xsd:date
+  - dbc:Dog_breeds
+  - dbo:Eukaryote
+  - xsd:double
+  - xsd:float
+  - dbo:Person
+  - dbo:Place
+  - xsd:time
+  - xsd:integer
+  - dbo:Game
+  - xsd:long
+
+	Resultado de análise morfologica e BabelNet:
+
+  lemma: luz
+  POS: NOUN
+  synsets: 
+  -s- light -t- Concept
+  -s- Divine_light -t- Concept
+  -s- Lightbox -t- Concept
+ ----- 
+
+  lemma: ser
+  POS: VERB
+  synsets: 
+  -s- exist -t- Concept
+  -s- debut -t- Concept
+  -s- actual -t- Concept
+  -s- existing -t- Concept
+  -s- be -t- Concept
+  -s- existence -t- Concept
+  -s- existent -t- Concept
+ ----- 
+
+  lemma: velocidade
+  POS: NOUN
+  synsets: 
+  -s- Design_speed -t- Concept
+  -s- amphetamine -t- Concept
+  -s- velocity -t- Concept
+  -s- airspeed -t- Concept
+  -s- speed -t- Concept
+ ----- 
+
+  lemma: máximo
+  POS: ADJECTIVE
+ ----- 
+
+
+	Conceitos na pergunta 
+
+  - actual
+  - be
+  - Design_speed
+  - existence
+  - amphetamine
+  - velocity
+  - airspeed
+  - existent
+  - speed
+  - Lightbox
+  - exist
+  - debut
+  - existing
+  - light
+  - Divine_light
+
+-------------------------------------------------------------------------------------------------
+	 Nova pergunta 
+
+  Pergunta: O que é um camelo?
+  Tipo de pergunta: null
+  Tipo de resposta: 
+
+	Resultado de análise morfologica e BabelNet:
+
+  lemma: camelo
+  POS: NOUN
+  synsets: 
+  -s- camel -t- Concept
+ ----- 
+
+  lemma: ser
+  POS: VERB
+  synsets: 
+  -s- exist -t- Concept
+  -s- debut -t- Concept
+  -s- actual -t- Concept
+  -s- existing -t- Concept
+  -s- be -t- Concept
+  -s- existence -t- Concept
+  -s- existent -t- Concept
+ ----- 
+
+
+	Conceitos na pergunta 
+
+  - exist
+  - debut
+  - actual
+  - existing
+  - be
+  - camel
+  - existence
+  - existent
+
+-------------------------------------------------------------------------------------------------
+	 Nova pergunta 
+
+  Pergunta: Qual é a velocidade máxima da luz?
+  Tipo de pergunta: WHICH
+  Tipo de resposta: 
+  - xsd:date
+  - dbc:Dog_breeds
+  - dbo:Eukaryote
+  - xsd:double
+  - xsd:float
+  - dbo:Person
+  - dbo:Place
+  - xsd:time
+  - xsd:integer
+  - dbo:Game
+  - xsd:long
+
+	Resultado de análise morfologica e BabelNet:
+
+  lemma: luz
+  POS: NOUN
+  synsets: 
+  -s- light -t- Concept
+  -s- Divine_light -t- Concept
+  -s- Lightbox -t- Concept
+ ----- 
+
+  lemma: ser
+  POS: VERB
+  synsets: 
+  -s- exist -t- Concept
+  -s- debut -t- Concept
+  -s- actual -t- Concept
+  -s- existing -t- Concept
+  -s- be -t- Concept
+  -s- existence -t- Concept
+  -s- existent -t- Concept
+ ----- 
+
+  lemma: velocidade
+  POS: NOUN
+  synsets: 
+  -s- Design_speed -t- Concept
+  -s- amphetamine -t- Concept
+  -s- velocity -t- Concept
+  -s- airspeed -t- Concept
+  -s- speed -t- Concept
+ ----- 
+
+  lemma: máximo
+  POS: ADJECTIVE
+ ----- 
+
+
+	Conceitos na pergunta 
+
+  - actual
+  - be
+  - Design_speed
+  - existence
+  - amphetamine
+  - velocity
+  - airspeed
+  - existent
+  - speed
+  - Lightbox
+  - exist
+  - debut
+  - existing
+  - light
+  - Divine_light
+
+-------------------------------------------------------------------------------------------------
+	 Nova pergunta 
+
+  Pergunta: O que é um camelo?
+  Tipo de pergunta: null
+  Tipo de resposta: 
+
+	Resultado de análise morfologica e BabelNet:
+
+  lemma: camelo
+  POS: NOUN
+  synsets: 
+  -s- camel -t- Concept
+ ----- 
+
+  lemma: ser
+  POS: VERB
+  synsets: 
+  -s- exist -t- Concept
+  -s- debut -t- Concept
+  -s- actual -t- Concept
+  -s- existing -t- Concept
+  -s- be -t- Concept
+  -s- existence -t- Concept
+  -s- existent -t- Concept
+ ----- 
+
+
+	Conceitos na pergunta 
+
+  - exist
+  - debut
+  - actual
+  - existing
+  - be
+  - camel
+  - existence
+  - existent
+
+-------------------------------------------------------------------------------------------------
+	 Nova pergunta 
+
+  Pergunta: Qual é a velocidade do Boeing 747?
+  Tipo de pergunta: WHICH
+  Tipo de resposta: 
+  - xsd:date
+  - dbc:Dog_breeds
+  - dbo:Eukaryote
+  - xsd:double
+  - xsd:float
+  - dbo:Person
+  - dbo:Place
+  - xsd:time
+  - xsd:integer
+  - dbo:Game
+  - xsd:long
+
+	Resultado de análise morfologica e BabelNet:
+
+  lemma: 747
+  POS: null
+ ----- 
+
+  lemma: ser
+  POS: VERB
+  synsets: 
+  -s- exist -t- Concept
+  -s- debut -t- Concept
+  -s- actual -t- Concept
+  -s- existing -t- Concept
+  -s- be -t- Concept
+  -s- existence -t- Concept
+  -s- existent -t- Concept
+ ----- 
+
+  lemma: boeing
+  POS: NOUN
+ ----- 
+
+  lemma: velocidade
+  POS: NOUN
+  synsets: 
+  -s- Design_speed -t- Concept
+  -s- amphetamine -t- Concept
+  -s- velocity -t- Concept
+  -s- airspeed -t- Concept
+  -s- speed -t- Concept
+ ----- 
+
+
+	Conceitos na pergunta 
+
+  - exist
+  - debut
+  - actual
+  - existing
+  - be
+  - Design_speed
+  - existence
+  - amphetamine
+  - velocity
+  - airspeed
+  - existent
+  - speed

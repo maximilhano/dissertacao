@@ -15,6 +15,7 @@ import edu.upc.freeling.ListWordIterator;
 import edu.upc.freeling.Maco;
 import edu.upc.freeling.MacoOptions;
 import edu.upc.freeling.Nec;
+import edu.upc.freeling.OutputConll;
 import edu.upc.freeling.ParseTree;
 import edu.upc.freeling.SWIGTYPE_p_splitter_status;
 import edu.upc.freeling.Senses;
@@ -79,6 +80,8 @@ public class NLPmodule {
         neclass = new Nec(DATA + LANG + "/nerc/nec/nec-ab-poor1.dat");
         sen = new Senses(DATA + LANG + "/senses.dat"); // sense dictionary
         dis = new Ukb(DATA + LANG + "/ukb.dat"); // sense disambiguator
+        
+        
 
         // Create options set for maco analyzer.
         // Default values are Ok, except for data files.
@@ -123,18 +126,31 @@ public class NLPmodule {
         parser.analyze(ls);
         // Dependency parser
         dep.analyze(ls);
+        
+        
 
         return getProcessedWords(ls);
     }
 
     private HashSet<ProcessedWord> getProcessedWords(ListSentence ls) {
+        
+        OutputConll conll = new OutputConll();
+        System.out.println("\n\n ----CONLL \n\n");
+        System.out.println(conll.printResults(ls));
+        
+        
+        
+        
         HashSet<ProcessedWord> processedWords = new HashSet<>();
         ListSentenceIterator sIt = new ListSentenceIterator(ls);
         
         while (sIt.hasNext()) {
             Sentence s = sIt.next();
             
+            //System.out.println("\n --- DepTree --- \n Para sentence: " + s.toString());
             //this.printDepTree(0, this.getDepTree(s));
+            
+            //System.out.println("\n ---- ParseTree ----- \n Para sentence: " + s.toString());
             //this.printParseTree(0, this.getParseTree(s));
             
             ListWordIterator wIt = new ListWordIterator(s);
@@ -171,7 +187,7 @@ public class NLPmodule {
     private BabelPOS posIdentifier(String tag) {
         BabelPOS resTag =null;
         char tagFirstChar = tag.charAt(0);
-        System.out.println("\t FREELING tag: " + tag);
+        //System.out.println("\t FREELING tag: " + tag);
         switch (tagFirstChar) {
             case 'A':
                 resTag = BabelPOS.ADJECTIVE;
@@ -213,7 +229,9 @@ public class NLPmodule {
     }
 
     private void printDepTree(int depth, DepTree tr) {
-
+        
+        
+        
         DepTree child = null;
         DepTree fchild = null;
         long nch;

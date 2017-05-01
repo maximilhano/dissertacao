@@ -20,7 +20,9 @@ public class AnswerTypeAnalysis {
                 put(QuestionTypes.WHEN,new HashSet<>(Arrays.asList("xsd:date")));
                 put(QuestionTypes.WHERE,new HashSet<>(Arrays.asList("dbo:Place")));
                 put(QuestionTypes.WHICH,new HashSet<>(Arrays.asList("dbo:Person", "dbo:Place","xsd:date","xsd:time",
-                                                       "owl:Thing","dbo:Game","dbo:Eukaryote","dbc:Dog_breeds")));
+                                                       "dbo:Game","dbo:Eukaryote","dbc:Dog_breeds","xsd:integer", 
+                                                       "xsd:float", "xsd:long","xsd:double")));
+                
                 put(QuestionTypes.HOW,new HashSet<>(Arrays.asList("xsd:integer", "xsd:float", "xsd:long","xsd:double",
                                                     "xsd:duration","xsd:positiveInteger","xsd:negativeInteger",
                                                     "xsd:unsignedInt","xsd:unsignedLong","xsd:unsignedShort")));

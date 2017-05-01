@@ -5,9 +5,12 @@
  */
 package Database;
 
+import Logging.Logger;
 import NLP.DetectSpecialCharacter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
@@ -28,6 +31,9 @@ public class LocalDatabase {
     private final String fusekiQuery = DB + "query";
     private final String fusekiUpdate = DB + "update";
     private final DetectSpecialCharacter specialCharacter = new DetectSpecialCharacter();
+    private final Logger log = new Logger();
+
+    QueryExecution qexecFuseki;
 
     private final String PREFIX = "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n"
             + "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n"
@@ -39,6 +45,7 @@ public class LocalDatabase {
             + "PREFIX dbpedia2: <http://dbpedia.org/property/>\n"
             + "PREFIX dbpedia: <http://dbpedia.org/>\n"
             + "PREFIX dbo: <http://dbpedia.org/ontology/>\n"
+            + "PREFIX dbc: <http://dbpedia.org/category/>\n"
             + "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n ";
 
     private final String updateQuery = PREFIX + "INSERT DATA { ";
@@ -48,11 +55,12 @@ public class LocalDatabase {
         while (entitiesInQuestionIterator.hasNext()) {
             String entity = entitiesInQuestionIterator.next();
             String query = constructNamedEntitySelectQuery(entity);
+            log.writeNamedEntitySelectQuery(query);
             ResultSet queryResult = runSelectQuery(query);
             String upQuery = constructNamedEntityUpdateQuery(queryResult, entity);
             if (!upQuery.isEmpty()) {
-                //System.out.println(upQuery);
-                //runUpdateQuery(upQuery); 
+                log.writeNamedEntityUpdateQuery(upQuery);
+                runUpdateQuery(upQuery);
             }
 
         }
@@ -60,8 +68,7 @@ public class LocalDatabase {
 
     private String constructNamedEntitySelectQuery(String namedEntity) {
         return "SELECT * WHERE "
-                + "{ :" + namedEntity + " ?p ?o ."
-                //+ "OPTIONAL { ?p rdf:type ?ptype }"
+                + "{ <http://dbpedia.org/resource/" + namedEntity + "> ?p ?o ."
                 + "OPTIONAL { ?o rdf:type ?otype }}";
     }
 
@@ -87,7 +94,7 @@ public class LocalDatabase {
 
                         split = object.toString().split("@");
                         if (!specialCharacter.hasSpecialCharacter(split[0])) {
-                            query += " :" + entity + " <" + predicate + "> \"" + split[0] + "\"@" + split[1] + " .\n";
+                            query += " <http://dbpedia.org/resource/" + entity + "> <" + predicate + "> \"" + split[0] + "\"@" + split[1] + " .\n";
                             //System.out.println("SPLIT 0: " + split[0]);
                             //System.err.println("SPLIT 1: " + split[1]);
                         }
@@ -99,7 +106,7 @@ public class LocalDatabase {
                         if (split.length > 1) {
                             split[0] = split[0].replace("^", "");
                             if (!specialCharacter.hasSpecialCharacter(split[0])) {
-                                query += " :" + entity + " <" + predicate + "> \"" + split[0] + "\"^^xsd:" + split[1] + " .\n";
+                                query += " <http://dbpedia.org/resource/" + entity + "> <" + predicate + "> \"" + split[0] + "\"^^xsd:" + split[1] + " .\n";
                                 //System.out.println("SPLIT 0: " + split[0]);
                                 //System.err.println("SPLIT 1: " + split[1]);
                             }
@@ -107,18 +114,16 @@ public class LocalDatabase {
 
                     } else {
                         if (!specialCharacter.hasSpecialCharacter(object.toString())) {
-                            query += " :" + entity + " <" + predicate + "> \"" + object + "\" .\n";
-                            //System.out.println("OBJECT: " + object.toString());
+                            query += " <http://dbpedia.org/resource/" + entity + "> <" + predicate + "> \"" + object + "\" .\n";
                         }
                     }
 
                 } else if (object.isResource()) {
-                    query += " :" + entity + " <" + predicate + "> <" + object + "> .\n";
+                    query += " <http://dbpedia.org/resource/" + entity + "> <" + predicate + "> <" + object + "> .\n";
 
 //                    if (predicateType != null) {
 //                        query += " <" + predicate + "> rdf:type <" + predicateType + "> .\n";
 //                    }
-
                     if (objectType != null) {
                         query += " <" + object + "> rdf:type <" + objectType + "> .\n";
                     }
@@ -136,45 +141,78 @@ public class LocalDatabase {
     private ResultSet runSelectQuery(String query) {
         QueryExecution qexec = QueryExecutionFactory.sparqlService(dbpediaEndpoint, PREFIX + query);
         ResultSet result = qexec.execSelect();
-        //printQueryResult(result);
         return result;
     }
 
     private void runUpdateQuery(String query) {
-        //System.err.println("runUpdateQuery");
-        //System.err.println("\n\n UPDATE QUERY: " + query + " \n\n");
         UpdateProcessor upp = UpdateExecutionFactory.createRemote(UpdateFactory.create(updateQuery + query + " }"), fusekiUpdate);
         upp.execute();
     }
 
     public HashSet<String> getPossibleProperties(String namedEntity, HashSet<String> concepts) {
-        //System.err.println("getPossibleProperties");
         HashSet<String> res = new HashSet<>();
         Iterator<String> it = concepts.iterator();
+        System.out.println("getPossibleProperties 1");
         while (it.hasNext()) {
             String next = it.next();
-            String query = "SELECT ?p WHERE "
-                    + "{ :" + namedEntity + " ?p ?o . "
+            System.out.println("getPossibleProperties 2");
+            String askQuery = "ASK "
+                    + "{ <http://dbpedia.org/resource/" + namedEntity + "> ?p ?o . "
                     + "FILTER regex(str(?p),\"" + next + "\",\"i\")}";
-            
-            System.err.println("getPossibleProperties: \n Query: " + query);
-            
-            ResultSet queryResult = runFusekiSelectQuery(query);
+             System.out.println("getPossibleProperties 3 + askquery: " + askQuery);
+            if (runFusekiAskQuery(askQuery)) {
+                 System.out.println("getPossibleProperties 4 ");
+                String query = "SELECT ?p WHERE "
+                        + "{ <http://dbpedia.org/resource/" + namedEntity + "> ?p ?o . "
+                        + "FILTER regex(str(?p),\"" + next + "\",\"i\")}";
 
-            while (queryResult.hasNext()) {
-                QuerySolution next1 = queryResult.next();
-                res.add(next1.get("p").toString());
+                System.out.println("A verificar se entidade: " + namedEntity + " tem a seguinte propriedade: " + next + "\n com a seguinte query: " + query);
+
+                HashSet<QuerySolution> result = runFusekiSelectQuery(query);
+                
+                for(QuerySolution s : result){
+                    System.out.println("A entidade: " + namedEntity + " tem a seguinte propriedade: " + next + " com URI: " + s.get("p").toString());
+                    res.add(s.get("p").toString());
+                }
             }
+            System.out.println("getPossibleProperties 5 ");
         }
-        System.out.println("RES: " + res);
+        System.out.println("getPossibleProperties return res: " + res);
         return res;
     }
 
-    private ResultSet runFusekiSelectQuery(String query) {
-        //System.err.println("runFusekiSelectQuery");
+//    public ResultSet runFusekiSelectQuery(String query) {
+//        qexecFuseki = QueryExecutionFactory.sparqlService(fusekiQuery, PREFIX + query);
+//        ResultSet result = qexecFuseki.execSelect();
+//        qexecFuseki.close();
+//        return result;
+//    }
+    
+    public HashSet<QuerySolution> runFusekiSelectQuery(String query) {
+        HashSet<QuerySolution> res = new HashSet<>();
+        qexecFuseki = QueryExecutionFactory.sparqlService(fusekiQuery, PREFIX + query);
+        ResultSet result = qexecFuseki.execSelect();
+        while (result.hasNext()) {
+            res.add(result.next());
+        }
+        qexecFuseki.close();
+        return res;
+    }
+
+    private boolean runDBpediaAskQuery(String query) {
+        QueryExecution qexec = QueryExecutionFactory.sparqlService(dbpediaEndpoint, PREFIX + query);
+        return qexec.execAsk();
+    }
+
+    private boolean runFusekiAskQuery(String query) {
+        System.out.println("runFusekiAskQuery 1 query: " + query);
         QueryExecution qexec = QueryExecutionFactory.sparqlService(fusekiQuery, PREFIX + query);
-        ResultSet result = qexec.execSelect();
-        return result;
+        
+        
+        boolean res = qexec.execAsk();
+        qexec.close();
+        System.out.println("runFusekiAskQuery 2 resiltado: " + res);
+        return res;
     }
 
     public HashSet<String> getPossibleClasses(String namedEntity, HashSet<String> concepts) {
@@ -186,12 +224,12 @@ public class LocalDatabase {
                     + "{ :" + namedEntity + " ?p ?o . "
                     + " ?o rdf:type ?otype"
                     + "FILTER regex(str(?otype),\"" + next + "\",\"i\")}";
-            ResultSet queryResult = runFusekiSelectQuery(query);
-
-            while (queryResult.hasNext()) {
-                QuerySolution next1 = queryResult.next();
-                res.add(next1.get("o").toString());
-            }
+//            ResultSet queryResult = runFusekiSelectQuery(query);
+//
+//            while (queryResult.hasNext()) {
+//                QuerySolution next1 = queryResult.next();
+//                res.add(next1.get("o").toString());
+//            }
         }
         return res;
     }
