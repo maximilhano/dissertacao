@@ -1,0 +1,10 @@
+<Type>
+conll
+</Type>
+<TagsetFile>
+/usr/local/share/freeling/pt/tagset.dat
+</TagsetFile>
+<Columns>
+ID	SPAN_BEGIN	SPAN_END	FORM	LEMMA	TAG	SHORT_TAG	MSD	NEC	SYNTAX	DEPHEAD	DEPREL	COREF
+
+</Columns>

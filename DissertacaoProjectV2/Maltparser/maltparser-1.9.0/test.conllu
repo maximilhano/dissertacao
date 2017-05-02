@@ -1,0 +1,35 @@
+# text = É dele o segundo lugar do Smirnoff International Fashion Awards, disputado anteontem em Dublin.									
+# source = CETENFolha n=892 cad=Ilustrada sec=nd sem=94a									
+# newdoc id = CF892									
+# sent_id = CF892-3									
+# id = 3759									
+1	É	ser	AUX	<mv>|V|PR|3S|IND|@FS-STA	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	_	_	_	_
+02-03-2017	dele	_	_	_	_	_	_	_	_
+2	de	de	ADP	<sam->|PRP|@<SC	_	_	_	_	_
+3	ele	ele	PRON	<-sam>|PERS|M|3S|NOM/PIV|@P<	Gender=Masc|Number=Sing|Person=3|PronType=Prs	_	_	_	_
+4	o	o	DET	<artd>|ART|M|S|@>N	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	_	_	_	_
+5	segundo	segundo	ADJ	<NUM-ord>|ADJ|M|S|@>N	Gender=Masc|Number=Sing|NumType=Ord	_	_	_	_
+6	lugar	lugar	NOUN	<np-def>|N|M|S|@<SUBJ	Gender=Masc|Number=Sing	_	_	_	_
+07-08-2017	do	_	_	_	_	_	_	_	_
+7	de	de	ADP	<sam->|PRP|@N<	_	_	_	_	_
+8	o	o	DET	<-sam>|<artd>|ART|M|S|@>N	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	_	_	_	_
+9	Smirnoff	Smirnoff	PROPN	_	Gender=Masc|Number=Sing	_	_	_	MWE=Smirnoff_International_Fashion_Awards|MWEPOS=PROPN
+10	International	International	PROPN	_	Number=Sing	_	_	_	_
+11	Fashion	Fashion	PROPN	_	Number=Sing	_	_	_	_
+12	Awards	Awards	PROPN	_	Number=Sing	_	_	_	SpaceAfter=No
+13	,	,	PUNCT	PU|@PU	_	_	_	_	_
+14	disputado	disputar	VERB	<mv>|V|PCP|M|S|@ICL-N<PRED	Gender=Masc|Number=Sing|VerbForm=Part	_	_	_	_
+15	anteontem	anteontem	ADV	ADV|@<ADVL	_	_	_	_	_
+16	em	em	ADP	PRP|@<ADVL	_	_	_	_	_
+17	Dublin	Dublin	PROPN	PROP|M|S|@P<	Gender=Masc|Number=Sing	_	_	_	SpaceAfter=No
+18	.	.	PUNCT	PU|@PU	_	_	_	_	_
+
+# text = Qual é a velocidade da luz?
+1 Qual       qual	ADJECTIVE	pos=pronoun|type=interrogative|gen=common|num=singular
+2 é          ser	VERB		pos=verb|type=main|mood=indicative|tense=present|person=3|num=singular
+3 a          o		DETERMINER	pos=determiner|type=article|gen=feminine|num=singular
+4 velocidade velocidade	NOUN		pos=noun|type=common|gen=feminine|num=singular
+5 máxima     máximo	ADJECTIVE	pos=adjective|type=qualificative|gen=feminine|num=singular
+6 de         de		_		pos=adposition|type=preposition
+7 a          o		DETERMINER	pos=determiner|type=article|gen=feminine|num=singular
+8 luz        luz	NOUN		pos=noun|type=common|gen=feminine|num=singular
